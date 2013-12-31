@@ -40,8 +40,9 @@
                 <li><a href="/documentation/dbconsole.html">dbconsole</a></li>
               </ul>
             </li>
+            <li><a href="https://github.com/scalikejdbc/hello-scalikejdbc">Play2 Sample</a></li>
             <li><a href="https://groups.google.com/group/scalikejdbc-users-group">Users Group</a></li>
-            <li><a href="https://github.com/scalikejdbc/scalikejdbc">Source</a></li>
+            <li><a href="https://github.com/scalikejdbc/scalikejdbc">GitHub</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -178,6 +179,46 @@
    <span class="o">.</span><span class="na">map</span> <span class="o">{</span> <span class="o">(</span><span class="n">group</span><span class="o">,</span> <span class="n">owner</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="n">group</span><span class="o">.</span><span class="na">copy</span><span class="o">(</span><span class="n">owner</span> <span class="o">=</span> <span class="n">owner</span><span class="o">)</span> <span class="o">}</span>
    <span class="o">.</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 </pre>
+<hr/>
+
+<h3 id="toc_4">Entity equality</h3>
+
+<p>In most cases, you will use case classes for entities. And basically it works fine. However, as you know, Scala (under 2.11) has 22 limitation and you cannot create a case class with more thatn 22 parameters. If your table has more than 22 columns, you need to create a normal class like this:</p>
+<pre class="highlight java"><span class="kd">class</span> <span class="nf">HugeTable</span><span class="p">(</span>
+  <span class="n">val</span> <span class="nl">id:</span> <span class="n">Long</span><span class="o">,</span> <span class="n">val</span> <span class="nl">c2:</span> <span class="n">String</span><span class="o">,</span> <span class="n">val</span> <span class="nl">c3:</span> <span class="n">String</span> <span class="o">....</span> <span class="n">val</span> <span class="nl">c23:</span> <span class="n">String</span><span class="o">)</span>
+
+<span class="n">object</span> <span class="n">HugeTable</span> <span class="kd">extends</span> <span class="n">SQLSyntaxSupport</span><span class="o">[</span><span class="n">HugeTable</span><span class="o">]</span> <span class="o">{</span>
+  <span class="n">def</span> <span class="n">apply</span><span class="o">(</span><span class="nl">h:</span> <span class="n">ResultName</span><span class="o">[</span><span class="n">HugeTable</span><span class="o">])(</span><span class="nl">rs:</span> <span class="n">WrappedResultSet</span><span class="o">)</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HugeTable</span><span class="o">(</span>
+    <span class="n">id</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">long</span><span class="o">(</span><span class="n">h</span><span class="o">.</span><span class="na">id</span><span class="o">),</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">long</span><span class="o">(</span><span class="n">h</span><span class="o">.</span><span class="na">c2</span><span class="o">),</span>
+    <span class="o">....</span>
+    <span class="n">c23</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">long</span><span class="o">(</span><span class="n">h</span><span class="o">.</span><span class="na">c23</span><span class="o">)</span>
+  <span class="o">)</span>
+<span class="o">}</span>
+</pre>
+<p>The above code also works fine except for the use of one-to-x APIs. Case classes nicely overrides <code>#equals</code> method. But <code>HugeTable</code>&rsquo;s <code>#equals</code> method won&rsquo;t work as you expect because it just predicates instance equality. So when you use normal classes and one-to-x APIs, you must override <code>#equals</code> method by yourself.</p>
+
+<p>Since version 1.7.3, ScalikeJDBC provides <code>EntityEquality</code> trait like this: </p>
+<pre class="highlight java"><span class="kd">class</span> <span class="nf">HugeTable</span><span class="p">(</span>
+  <span class="n">val</span> <span class="nl">id:</span> <span class="n">Long</span><span class="o">,</span> <span class="n">val</span> <span class="nl">c2:</span> <span class="n">String</span><span class="o">,</span> <span class="n">val</span> <span class="nl">c3:</span> <span class="n">String</span> <span class="o">....</span> <span class="n">val</span> <span class="nl">c23:</span> <span class="n">String</span><span class="o">)</span> 
+  <span class="kd">extends</span> <span class="n">EntityEquality</span> <span class="o">{</span>
+
+  <span class="n">override</span> <span class="n">val</span> <span class="nl">entityIdentity:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">id</span>
+<span class="o">}</span>
+</pre>
+<p><code>#equals</code> method predicates equality with <code>entityIdentity</code> and the class is same. The above code use only <code>id</code> value for equality. If it isn&rsquo;t appropriate, define <code>entityIdentity</code> differently.</p>
+<pre class="highlight java"><span class="kd">class</span> <span class="nf">HugeTable</span><span class="p">(</span>
+  <span class="n">val</span> <span class="nl">id:</span> <span class="n">Long</span><span class="o">,</span> <span class="n">val</span> <span class="nl">c2:</span> <span class="n">String</span><span class="o">,</span> <span class="n">val</span> <span class="nl">c3:</span> <span class="n">String</span> <span class="o">....</span> <span class="n">val</span> <span class="nl">c23:</span> <span class="n">String</span><span class="o">)</span>
+  <span class="kd">extends</span> <span class="n">EntityEquality</span> <span class="o">{</span>
+
+  <span class="n">override</span> <span class="n">val</span> <span class="nl">entityIdentity:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">s</span><span class="s">&quot;$id, $c2, $c3, ... $23&quot;</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="nl">entityIdentity:</span> <span class="n">Any</span> <span class="o">=</span> <span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">c2</span><span class="o">,</span> <span class="n">c3</span><span class="o">)</span>
+<span class="o">}</span>
+</pre>
+<p>If you&rsquo;re still using older version and you cannot upgrade version right now, see the <code>EntityEquality</code> implementation and do the same thing.</p>
+
+<p><a href="https://github.com/scalikejdbc/scalikejdbc/blob/develop/scalikejdbc-library/src/main/scala/scalikejdbc/EntityEquality.scala">https://github.com/scalikejdbc/scalikejdbc/blob/develop/scalikejdbc-library/src/main/scala/scalikejdbc/EntityEquality.scala</a></p>
+
             <hr/>
             <div class="alert alert-info small"> 
               If this webpage has typo or something wrong, Please report or fix. <a href="/contribution.html">How?</a>
