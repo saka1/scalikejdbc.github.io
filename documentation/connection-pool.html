@@ -36,8 +36,8 @@
                 <li><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></li>
                 <li><a href="/documentation/testing.html">Testing</a></li>
                 <li><a href="/documentation/playframework-support.html">Play2 Support</a></li>
-                <li><a href="/contribution.html">Contribution</a></li>
                 <li><a href="/documentation/dbconsole.html">dbconsole</a></li>
+                <li><a href="/contribution.html">Contribution</a></li>
               </ul>
             </li>
             <li><a href="https://github.com/scalikejdbc/hello-scalikejdbc">Play2 Sample</a></li>
@@ -64,8 +64,8 @@
             <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
-            <p><a href="/contribution.html">Contribution</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
+            <p><a href="/contribution.html">Contribution</a></p>
           </div>
         </div>
         <div class="col-xs-10">
@@ -77,11 +77,15 @@
 
 <h3 id="toc_1">Configuration</h3>
 
+<hr/>
+
 <p>See <a href="/documentation/configuration.html">/documentation/configuration</a></p>
 
 <hr/>
 
-<h3 id="toc_2">Borrowing a connection from pool</h3>
+<h3 id="toc_2">Borrowing Connections</h3>
+
+<hr/>
 
 <p>Simply just call <code>#borrow</code> method.</p>
 <pre class="highlight java"><span class="kn">import</span> <span class="nn">scalikejdbc._</span>
@@ -123,7 +127,9 @@
 </pre>
 <hr/>
 
-<h3 id="toc_3">Thread-local Connection pattern</h3>
+<h3 id="toc_3">Thread-local Connection Pattern</h3>
+
+<hr/>
 
 <p>You can share DB connections as thread-local values. The connection should be released by yourself.</p>
 <pre class="highlight java"><span class="n">def</span> <span class="nf">init</span><span class="p">(</span><span class="o">)</span> <span class="o">=</span> <span class="o">{</span>
@@ -140,7 +146,9 @@
 </pre>
 <hr/>
 
-<h3 id="toc_4">Replacing ConnectionPool</h3>
+<h3 id="toc_4">Replacing ConnectionPool on Runtime</h3>
+
+<hr/>
 
 <p>If you want to use another one which is not Commons DBCP as the connection provider, You can also specify your own <code>ConnectionPoolFactory</code> as follows:</p>
 <pre class="highlight java"><span class="cm">/**

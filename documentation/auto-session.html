@@ -36,8 +36,8 @@
                 <li><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></li>
                 <li><a href="/documentation/testing.html">Testing</a></li>
                 <li><a href="/documentation/playframework-support.html">Play2 Support</a></li>
-                <li><a href="/contribution.html">Contribution</a></li>
                 <li><a href="/documentation/dbconsole.html">dbconsole</a></li>
+                <li><a href="/contribution.html">Contribution</a></li>
               </ul>
             </li>
             <li><a href="https://github.com/scalikejdbc/hello-scalikejdbc">Play2 Sample</a></li>
@@ -64,8 +64,8 @@
             <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
-            <p><a href="/contribution.html">Contribution</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
+            <p><a href="/contribution.html">Contribution</a></p>
           </div>
         </div>
         <div class="col-xs-10">
@@ -77,15 +77,19 @@
 
 <h3 id="toc_1">Why AutoSession?</h3>
 
-<p>Basic usage of ScalikeJDBC is using <code>DB.autoCommit/readOnly/localTx/withinTx { ...}</code> blocks.
-However, if you&rsquo;d like to re-use methods, they might not be available.</p>
+<hr/>
+
+<p>Basic usage of ScalikeJDBC is using <code>DB.autoCommit/readOnly/localTx/withinTx { ...}</code> blocks.</p>
+
+<p>However, if you&rsquo;d like to re-use methods, they might not be available.</p>
 <pre class="highlight java"><span class="n">def</span> <span class="nf">findById</span><span class="p">(</span><span class="nl">id:</span> <span class="n">Long</span><span class="o">)</span> <span class="o">=</span> <span class="n">DB</span> <span class="n">readOnly</span> <span class="o">{</span>
   <span class="n">sql</span><span class="s">&quot;select id, name from members where id = ${id}&quot;</span>
     <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">rs</span> <span class="o">=&gt;</span> <span class="n">Member</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="na">single</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 <span class="o">}</span>
 </pre>
-<p>When you use the above method in a transaction block, the code won&rsquo;t work as you expected.
-The reason is that since <code>#findById(Long)</code> uses another session(=connection), it couldn&rsquo;t access uncommitted data.</p>
+<p>When you use the above method in a transaction block, the code won&rsquo;t work as you expected.</p>
+
+<p>The reason is that since <code>#findById(Long)</code> uses another session(=connection), it couldn&rsquo;t access uncommitted data.</p>
 <pre class="highlight java"><span class="n">DB</span> <span class="n">localTx</span> <span class="o">{</span> <span class="n">implicit</span> <span class="n">session</span> <span class="o">=&gt;</span>
   <span class="n">val</span> <span class="n">id</span> <span class="o">=</span> <span class="n">create</span><span class="o">(</span><span class="s">&quot;Alice&quot;</span><span class="o">)</span>
   <span class="n">findById</span><span class="o">(</span><span class="n">id</span><span class="o">)</span> <span class="c1">// Not found!</span>
@@ -121,6 +125,16 @@ The reason is that since <code>#findById(Long)</code> uses another session(=conn
 <pre class="highlight java"><span class="n">def</span> <span class="nf">findById</span><span class="p">(</span><span class="nl">id:</span> <span class="n">Long</span><span class="o">)(</span><span class="n">implicit</span> <span class="nl">session:</span> <span class="n">DBSession</span> <span class="o">=</span> <span class="n">NamedAutoSession</span><span class="o">(</span><span class="err">&#39;</span><span class="n">named</span><span class="o">))</span> <span class="o">=</span>
   <span class="n">sql</span><span class="s">&quot;select id, name from members where id = ${id}&quot;</span>
 </pre>
+<hr/>
+
+<h3 id="toc_2">ReadOnlyAutoSession</h3>
+
+<hr/>
+
+<p>Since version 1.7.4, <code>ReadOnlyAutoSession</code> and <code>NamedReadOnlyAutoSession</code> is also available. </p>
+
+<p>These auto sessions disallow update/execute operations.</p>
+
             <hr/>
             <div class="alert alert-info small"> 
               If this webpage has typo or something wrong, Please report or fix. <a href="/contribution.html">How?</a>

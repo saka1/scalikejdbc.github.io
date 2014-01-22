@@ -36,8 +36,8 @@
                 <li><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></li>
                 <li><a href="/documentation/testing.html">Testing</a></li>
                 <li><a href="/documentation/playframework-support.html">Play2 Support</a></li>
-                <li><a href="/contribution.html">Contribution</a></li>
                 <li><a href="/documentation/dbconsole.html">dbconsole</a></li>
+                <li><a href="/contribution.html">Contribution</a></li>
               </ul>
             </li>
             <li><a href="https://github.com/scalikejdbc/hello-scalikejdbc">Play2 Sample</a></li>
@@ -64,8 +64,8 @@
             <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
-            <p><a href="/contribution.html">Contribution</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
+            <p><a href="/contribution.html">Contribution</a></p>
           </div>
         </div>
         <div class="col-xs-10">
@@ -82,6 +82,8 @@
 <hr/>
 
 <h3 id="toc_1">Core Library &amp; Interpolation</h3>
+
+<hr/>
 
 <p>Add latest version into your <code>build.sbt</code> or <code>project/Build.scala</code>. Don&rsquo;t forget JDBC driver and slf4j implementation.</p>
 
@@ -100,6 +102,8 @@
 
 <h3 id="toc_2">Testing Support</h3>
 
+<hr/>
+
 <p>Using <code>scalikejdbc-test</code> is highly recommended to improve your application.</p>
 <pre class="highlight text">libraryDependencies ++= Seq(
   &quot;org.scalikejdbc&quot; %% &quot;scalikejdbc&quot;               % &quot;[1.7,)&quot;,
@@ -115,6 +119,8 @@
 
 <h3 id="toc_3">Typesafe Config Reader</h3>
 
+<hr/>
+
 <p>If you use <code>application.conf</code> as settings file, add <code>scalikejdbc-config</code> too.</p>
 <pre class="highlight text">libraryDependencies ++= Seq(
   &quot;org.scalikejdbc&quot; %% &quot;scalikejdbc&quot;               % &quot;[1.7,)&quot;,
@@ -129,6 +135,8 @@
 <hr/>
 
 <h3 id="toc_4">Reverse Engineering</h3>
+
+<hr/>
 
 <p>ScalikeJDBC support reverse engineering Scala code from existing database.
 You need to setup an sbt plugin named <code>scalikejdbc-mapper-generator</code>.</p>
@@ -163,6 +171,8 @@ generator.encoding=UTF-8
 
 <h3 id="toc_8">Play Framework Integration</h3>
 
+<hr/>
+
 <p>Add <code>scalikejdbc-play-plugin</code> and <code>scalikejdbc-play-fixture-plugin</code> (optional) as Play plugins.</p>
 
 <h5 id="toc_9">project/Build.scala</h5>
@@ -186,6 +196,8 @@ generator.encoding=UTF-8
 <hr/>
 
 <h3 id="toc_11">dbconsole</h3>
+
+<hr/>
 
 <p>A simple console to connect database via JDBC.</p>
 

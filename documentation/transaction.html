@@ -36,8 +36,8 @@
                 <li><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></li>
                 <li><a href="/documentation/testing.html">Testing</a></li>
                 <li><a href="/documentation/playframework-support.html">Play2 Support</a></li>
-                <li><a href="/contribution.html">Contribution</a></li>
                 <li><a href="/documentation/dbconsole.html">dbconsole</a></li>
+                <li><a href="/contribution.html">Contribution</a></li>
               </ul>
             </li>
             <li><a href="https://github.com/scalikejdbc/hello-scalikejdbc">Play2 Sample</a></li>
@@ -64,8 +64,8 @@
             <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
-            <p><a href="/contribution.html">Contribution</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
+            <p><a href="/contribution.html">Contribution</a></p>
           </div>
         </div>
         <div class="col-xs-10">
@@ -76,6 +76,8 @@
 <hr/>
 
 <h3 id="toc_1">#readOnly block / session</h3>
+
+<hr/>
 
 <p>Executes query in read-only mode.</p>
 <pre class="highlight java"><span class="n">val</span> <span class="n">names</span> <span class="o">=</span> <span class="n">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="n">implicit</span> <span class="n">session</span> <span class="o">=&gt;</span>
@@ -99,6 +101,8 @@
 
 <h3 id="toc_2">#autoCommit block / session</h3>
 
+<hr/>
+
 <p>Executes query / update in auto-commit mode.</p>
 <pre class="highlight java"><span class="n">val</span> <span class="n">count</span> <span class="o">=</span> <span class="n">DB</span> <span class="n">autoCommit</span> <span class="o">{</span> <span class="n">implicit</span> <span class="n">session</span> <span class="o">=&gt;</span>
   <span class="n">sql</span><span class="s">&quot;update emp set name = ${name} where id = ${id}&quot;</span><span class="o">).</span><span class="na">update</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
@@ -115,6 +119,8 @@
 
 <h3 id="toc_3">#localTx block</h3>
 
+<hr/>
+
 <p>Executes query / update in block-scoped transactions.</p>
 
 <p>If an Exception was thrown in the block, the transaction will perform rollback automatically.</p>
@@ -129,8 +135,11 @@
 
 <h3 id="toc_4">#withinTx block / session</h3>
 
-<p>Executes query / update in already existing transactions.
-In this case, all the transactional operations (such as <code>Tx#begin()</code>, <code>Tx#rollback()</code> or <code>Tx#commit()</code>) should be managed by users of ScalikeJDBC.</p>
+<hr/>
+
+<p>Executes query / update in already existing transactions.</p>
+
+<p>In this case, all the transactional operations (such as <code>Tx#begin()</code>, <code>Tx#rollback()</code> or <code>Tx#commit()</code>) should be managed by users of ScalikeJDBC.</p>
 <pre class="highlight java"><span class="n">val</span> <span class="n">db</span> <span class="o">=</span> <span class="n">DB</span><span class="o">(</span><span class="n">conn</span><span class="o">)</span>
 <span class="k">try</span> <span class="o">{</span>
   <span class="n">db</span><span class="o">.</span><span class="na">begin</span><span class="o">()</span>

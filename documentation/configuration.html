@@ -36,8 +36,8 @@
                 <li><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></li>
                 <li><a href="/documentation/testing.html">Testing</a></li>
                 <li><a href="/documentation/playframework-support.html">Play2 Support</a></li>
-                <li><a href="/contribution.html">Contribution</a></li>
                 <li><a href="/documentation/dbconsole.html">dbconsole</a></li>
+                <li><a href="/contribution.html">Contribution</a></li>
               </ul>
             </li>
             <li><a href="https://github.com/scalikejdbc/hello-scalikejdbc">Play2 Sample</a></li>
@@ -64,8 +64,8 @@
             <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
-            <p><a href="/contribution.html">Contribution</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
+            <p><a href="/contribution.html">Contribution</a></p>
           </div>
         </div>
         <div class="col-xs-10">
@@ -79,7 +79,9 @@
 
 <hr/>
 
-<h3 id="toc_1">JDBC Driver</h3>
+<h3 id="toc_1">Loading JDBC Drivers</h3>
+
+<hr/>
 
 <p>In advance, JDBC drivers must be loaded by using</p>
 <pre class="highlight text">Class.forName(String)
@@ -93,7 +95,9 @@
 
 <h3 id="toc_2">Connection Pool Settings</h3>
 
-<p>ConnectionPool should be initialized on startu.</p>
+<hr/>
+
+<p>ConnectionPool should be initialized when starting your applications.</p>
 <pre class="highlight java"><span class="kn">import</span> <span class="nn">scalikejdbc._</span>
 
 <span class="c1">// after loading JDBC drivers</span>
@@ -108,6 +112,17 @@
 
 <span class="c1">// all the connections are released, old connection pool will be abandoned</span>
 <span class="n">ConnectionPool</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="err">&#39;</span><span class="n">foo</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> <span class="n">settings</span><span class="o">)</span>
+</pre>
+<p>When you use external DataSource (e.g. application server&rsquo;s connection pool), use javax.sql.DataSource via JNDI:</p>
+<pre class="highlight java"><span class="kn">import</span> <span class="nn">javax.naming._</span>
+<span class="kn">import</span> <span class="nn">javax.sql._</span>
+<span class="n">val</span> <span class="n">ds</span> <span class="o">=</span> <span class="o">(</span><span class="k">new</span> <span class="n">InitialContext</span><span class="o">)</span>
+  <span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="s">&quot;java:/comp/env&quot;</span><span class="o">).</span><span class="na">asInstanceOf</span><span class="o">[</span><span class="n">Context</span><span class="o">]</span>
+  <span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="n">name</span><span class="o">).</span><span class="na">asInstanceOf</span><span class="o">[</span><span class="n">DataSource</span><span class="o">]</span>
+
+<span class="kn">import</span> <span class="nn">scalikejdbc._</span>
+<span class="n">ConnnectionPool</span><span class="o">.</span><span class="na">singleton</span><span class="o">(</span><span class="k">new</span> <span class="n">DataSourceConnectionPool</span><span class="o">(</span><span class="n">ds</span><span class="o">))</span>
+<span class="n">ConnnectionPool</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="err">&#39;</span><span class="n">foo</span><span class="o">,</span> <span class="k">new</span> <span class="n">DataSourceConnectionPool</span><span class="o">(</span><span class="n">ds</span><span class="o">))</span>
 </pre>
 <p><code>ConnectionPool</code> and <code>ConnectionPoolSettings</code>&rsquo;s parameters are like this:</p>
 <pre class="highlight java"><span class="kd">abstract</span> <span class="kd">class</span> <span class="nf">ConnectionPool</span><span class="p">(</span>
@@ -127,6 +142,8 @@
 
 <h3 id="toc_3">Global Settings</h3>
 
+<hr/>
+
 <p>Global settings for logging for query inspection and so on.</p>
 <pre class="highlight java"><span class="n">object</span> <span class="n">GlobalSettings</span> <span class="o">{</span>
   <span class="n">var</span> <span class="nl">loggingSQLErrors:</span> <span class="n">Boolean</span>
@@ -141,7 +158,9 @@
 
 <hr/>
 
-<h3 id="toc_4">Using scalikejdbc-config</h3>
+<h3 id="toc_4">scalikejdbc-config</h3>
+
+<hr/>
 
 <p>If you use <code>scalikejdbc-config</code> which is an easy-to-use configuration loader for ScalikeJDBC which reads typesafe config, configuration is much simple.</p>
 
@@ -189,7 +208,9 @@ db.legacy.password=&quot;bar&quot;
 </pre>
 <hr/>
 
-<h3 id="toc_5">Using scalikejdbc-config with environment</h3>
+<h3 id="toc_5">scalikejdbc-config with Environment</h3>
+
+<hr/>
 
 <p>It&rsquo;s also possible to add prefix(e.g. environment).</p>
 <pre class="highlight text">development.db.default.driver=&quot;org.h2.Driver&quot;
@@ -214,7 +235,9 @@ prod {
 </pre>
 <hr/>
 
-<h3 id="toc_6">Using scalikejdbc-config for Global Settings</h3>
+<h3 id="toc_6">scalikejdbc-config for Global Settings</h3>
+
+<hr/>
 
 <p>The following settings are available.</p>
 <pre class="highlight text"># Global settings
