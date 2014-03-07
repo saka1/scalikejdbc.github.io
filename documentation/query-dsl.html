@@ -180,8 +180,7 @@
 
 <hr/>
 <pre class="highlight java"><span class="n">val</span> <span class="n">inClauseResults</span> <span class="o">=</span> <span class="n">withSQL</span> <span class="o">{</span>
-  <span class="n">select</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">)</span>
-    <span class="o">.</span><span class="na">where</span><span class="o">.</span><span class="na">in</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="na">id</span><span class="o">,</span> <span class="n">Seq</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">))</span>
+  <span class="n">select</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">).</span><span class="na">where</span><span class="o">.</span><span class="na">in</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="na">id</span><span class="o">,</span> <span class="n">Seq</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
 <span class="o">}.</span><span class="na">map</span><span class="o">(</span><span class="n">Order</span><span class="o">(</span><span class="n">o</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 </pre>
 <hr/>
