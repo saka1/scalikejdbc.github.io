@@ -149,6 +149,8 @@
 <hr/>
 
 <p>You can use hooks such as <code>GlobalSettings.queryCompletionListener</code> and <code>GlobalSettings.queryFailureListener</code>.</p>
+
+<p>For instance, the following example will send information about slow queries to Fluentd.</p>
 <pre class="highlight java"><span class="kn">import</span> <span class="nn">org.fluentd.logger.scala._</span>
 <span class="n">val</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">FluentLoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;scalikejdbc&quot;</span><span class="o">)</span>
 
