@@ -7,7 +7,7 @@
     <title>SQLInterpolation - ScalikeJDBC</title>
     <script type="text/javascript" src="//codeorigin.jquery.com/jquery-1.10.2.min.js"></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css"/>
-    <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/stylesheets/all.css" rel="stylesheet" type="text/css" />
     <script src="/javascripts/all.js" type="text/javascript"></script>
   </head>
   <body>
@@ -71,50 +71,55 @@
         <div class="col-xs-10">
           <div class="content">
 <a href="https://github.com/scalikejdbc/scalikejdbc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
-            <h2 id="toc_0">SQLInterpolation</h2>
+            <h2 id="sqlinterpolation">SQLInterpolation</h2>
 
 <hr/>
 
-<h3 id="toc_1">What&rsquo;s SQLInterpolation</h3>
+<h3 id="what&#39;s-sqlinterpolation">What&rsquo;s SQLInterpolation</h3>
 
 <hr/>
 
 <p>SQLInterpolation is an SQL builder which uses String interpolation since Scala 2.10. Add scalikejbdc-interpolation to libraryDependencies.</p>
-<pre class="highlight text">libraryDependencies += &quot;org.scalikejdbc&quot; %% &quot;scalikejdbc-interpolation&quot; % &quot;1.7.4&quot;
+<pre class="highlight plaintext">libraryDependencies += "org.scalikejdbc" %% "scalikejdbc-interpolation" % "1.7.7"
 </pre>
+
 <p>The usage is pretty simple - just embedding values into sql&quot;&ldquo; template without <code>#bind</code> or <code>#bindByName</code>. It looks really cool.</p>
 <pre class="highlight java"><span class="kn">import</span> <span class="nn">scalikejdbc._</span><span class="o">,</span> <span class="n">SQLInterpolation</span><span class="o">.</span><span class="na">_</span>
 
 <span class="n">val</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">123</span>
-<span class="n">val</span> <span class="n">member</span> <span class="o">=</span> <span class="n">sql</span><span class="s">&quot;select id, name from members where id = ${id}&quot;</span>
+<span class="n">val</span> <span class="n">member</span> <span class="o">=</span> <span class="n">sql</span><span class="s">"select id, name from members where id = ${id}"</span>
     <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">rs</span> <span class="o">=&gt;</span> <span class="n">Member</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="na">single</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 
 <span class="c1">// above code is same as follows:</span>
-<span class="c1">// SQL(&quot;select id, name from members where id = {id}&quot;).bindByName(&#39;id -&gt; id)</span>
+<span class="c1">// SQL("select id, name from members where id = {id}").bindByName('id -&gt; id)</span>
 <span class="c1">//   .map(rs =&gt; Member(rs)).single.apply()</span>
 </pre>
+
 <p>Don&rsquo;t worry, this code is safely protected from SQL injection attacks. <code>${id}</code> will be a place holder.</p>
 <pre class="highlight sql"><span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="n">name</span> <span class="k">from</span> <span class="n">members</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="o">?</span>
 </pre>
+
 <hr/>
 
-<h3 id="toc_2">SQLSyntax</h3>
+<h3 id="sqlsyntax">SQLSyntax</h3>
 
 <hr/>
 
 <p><code>SQLSyntax</code> is not a binding parameter but a part of SQL. You can create a <code>SQLSyntax</code> object with sqls&rdquo;&ldquo; String interpolation.</p>
-<pre class="highlight java"><span class="n">val</span> <span class="n">ordering</span> <span class="o">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">isDesc</span><span class="o">)</span> <span class="n">sqls</span><span class="s">&quot;desc&quot;</span> <span class="k">else</span> <span class="n">sqls</span><span class="s">&quot;asc&quot;</span>
-<span class="n">val</span> <span class="n">members</span> <span class="o">=</span> <span class="n">sql</span><span class="s">&quot;select id, name from members limit 10 order by id ${ordering}&quot;</span>
+<pre class="highlight java"><span class="n">val</span> <span class="n">ordering</span> <span class="o">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">isDesc</span><span class="o">)</span> <span class="n">sqls</span><span class="s">"desc"</span> <span class="k">else</span> <span class="n">sqls</span><span class="s">"asc"</span>
+<span class="n">val</span> <span class="n">members</span> <span class="o">=</span> <span class="n">sql</span><span class="s">"select id, name from members limit 10 order by id ${ordering}"</span>
   <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">rs</span> <span class="o">=&gt;</span> <span class="n">Member</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 </pre>
+
 <p><code>${ordering}</code> will be directly converted to a part of SQL.</p>
 <pre class="highlight sql"><span class="k">select</span> <span class="n">id</span> <span class="p">,</span> <span class="n">name</span> <span class="k">from</span> <span class="n">members</span> <span class="k">limit</span> <span class="mi">10</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span> <span class="k">desc</span>
 </pre>
+
 <p>Don&rsquo;t worry again, this code is safely protected. <code>sqls&quot;&quot;</code> always treats external input values as binding parameters.</p>
 
 <hr/>
 
-<h3 id="toc_3">SQLSyntaxSupport</h3>
+<h3 id="sqlsyntaxsupport">SQLSyntaxSupport</h3>
 
 <hr/>
 
@@ -132,16 +137,16 @@
 <span class="n">object</span> <span class="n">Group</span> <span class="kd">extends</span> <span class="n">SQLSyntaxSupport</span><span class="o">[</span><span class="n">Group</span><span class="o">]</span> <span class="o">{</span>
 
   <span class="c1">// If you need to specify schema name, override this</span>
-  <span class="c1">// def table will return sqls&quot;public.groups&quot; in this case</span>
-  <span class="c1">// Of course, schemaName doesn&#39;t work with MySQL</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">schemaName</span> <span class="o">=</span> <span class="n">Some</span><span class="o">(</span><span class="s">&quot;public&quot;</span><span class="o">)</span>
+  <span class="c1">// def table will return sqls"public.groups" in this case</span>
+  <span class="c1">// Of course, schemaName doesn't work with MySQL</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">schemaName</span> <span class="o">=</span> <span class="n">Some</span><span class="o">(</span><span class="s">"public"</span><span class="o">)</span>
 
-  <span class="c1">// If the table name is same as snake_case&#39;d name of this companion object,</span>
-  <span class="c1">// you don&#39;t need to specify tableName explicitly.</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">&quot;groups&quot;</span>
+  <span class="c1">// If the table name is same as snake_case'd name of this companion object,</span>
+  <span class="c1">// you don't need to specify tableName explicitly.</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">"groups"</span>
 
   <span class="c1">// If you use NamedDB for this entity, override connectionPoolName</span>
-  <span class="c1">//override val connectionPoolName = &#39;anotherdb</span>
+  <span class="c1">//override val connectionPoolName = 'anotherdb</span>
 
   <span class="n">def</span> <span class="n">apply</span><span class="o">(</span><span class="nl">g:</span> <span class="n">ResultName</span><span class="o">[</span><span class="n">Group</span><span class="o">])(</span><span class="nl">rs:</span> <span class="n">WrappedResultSet</span><span class="o">)</span> <span class="o">=</span>
     <span class="k">new</span> <span class="n">Group</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">long</span><span class="o">(</span><span class="n">g</span><span class="o">.</span><span class="na">id</span><span class="o">),</span> <span class="n">rs</span><span class="o">.</span><span class="na">string</span><span class="o">(</span><span class="n">g</span><span class="o">.</span><span class="na">name</span><span class="o">))</span>
@@ -156,20 +161,22 @@
   <span class="o">}</span>
 <span class="o">}</span>
 </pre>
+
 <p>Use them as follows:</p>
 <pre class="highlight java"><span class="n">val</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">123</span>
 
-<span class="n">val</span> <span class="o">(</span><span class="n">m</span><span class="o">,</span> <span class="n">g</span><span class="o">)</span> <span class="o">=</span> <span class="o">(</span><span class="n">GroupMember</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">&quot;m&quot;</span><span class="o">),</span> <span class="n">Group</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">&quot;g&quot;</span><span class="o">))</span>
-<span class="n">val</span> <span class="nl">groupMember:</span> <span class="n">Option</span><span class="o">[</span><span class="n">GroupMember</span><span class="o">]</span> <span class="o">=</span> <span class="n">sql</span><span class="s">&quot;&quot;&quot;
+<span class="n">val</span> <span class="o">(</span><span class="n">m</span><span class="o">,</span> <span class="n">g</span><span class="o">)</span> <span class="o">=</span> <span class="o">(</span><span class="n">GroupMember</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">"m"</span><span class="o">),</span> <span class="n">Group</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">"g"</span><span class="o">))</span>
+<span class="n">val</span> <span class="nl">groupMember:</span> <span class="n">Option</span><span class="o">[</span><span class="n">GroupMember</span><span class="o">]</span> <span class="o">=</span> <span class="n">sql</span><span class="s">"""
   select
     ${m.result.*}, ${g.result.*}
   from
     ${GroupMember.as(m)} left join ${Group.as(g)} on ${m.groupId} = ${g.id}
   where
     ${m.id} = ${id}
-  &quot;&quot;&quot;</span>
+  """</span>
   <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">GroupMember</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="na">resultName</span><span class="o">,</span> <span class="n">g</span><span class="o">.</span><span class="na">resultName</span><span class="o">)).</span><span class="na">single</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 </pre>
+
 <p>Though the above code contains some <code>${...}</code> parts, I believe that you can understand what it means. Actually, this code runs the following SQL statement.</p>
 <pre class="highlight sql"><span class="k">select</span>
    <span class="n">m</span><span class="p">.</span><span class="n">id</span> <span class="k">as</span> <span class="n">i_on_m</span><span class="p">,</span> <span class="n">m</span><span class="p">.</span><span class="n">name</span> <span class="k">as</span> <span class="n">n_on_m</span><span class="p">,</span> <span class="n">m</span><span class="p">.</span><span class="n">group_id</span> <span class="k">as</span> <span class="n">gi_on_m</span><span class="p">,</span> <span class="k">g</span><span class="p">.</span><span class="n">id</span> <span class="k">as</span> <span class="n">i_on_g</span><span class="p">,</span> <span class="k">g</span><span class="p">.</span><span class="n">name</span> <span class="k">as</span> <span class="n">n_on_g</span>
@@ -178,11 +185,12 @@
 <span class="k">where</span>
   <span class="n">m</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">?</span>
 </pre>
+
 <p>It seems to be natural that <code>${m.result.*}</code> is converted to listing all the columns, <code>${m.camelCase}</code> is converted to the <code>snake_case</code> column name. However, since you may have questions, I&rsquo;ll explain about some points.</p>
 
 <hr/>
 
-<h4 id="toc_4">Why is ${m.result.*} transformed to listing all the columns?</h4>
+<h4 id="why-is-${m.result.*}-transformed-to-listing-all-the-columns?">Why is ${m.result.*} transformed to listing all the columns?</h4>
 
 <hr/>
 
@@ -190,13 +198,14 @@
 
 <p>If you need to define column names by yourself or need to access multi databases, please define column names as follows:</p>
 <pre class="highlight java"><span class="n">object</span> <span class="n">GroupMember</span> <span class="kd">extends</span> <span class="n">SQLSyntaxSupport</span><span class="o">[</span><span class="n">GroupMember</span><span class="o">]</span> <span class="o">{</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">&quot;groups_members&quot;</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">Seq</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">,</span> <span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="s">&quot;group_id&quot;</span><span class="o">)</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">"groups_members"</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">Seq</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="s">"name"</span><span class="o">,</span> <span class="s">"group_id"</span><span class="o">)</span>
 <span class="o">}</span>
 </pre>
+
 <hr/>
 
-<h4 id="toc_5">Why can we use undefined methods such as m.groupId?</h4>
+<h4 id="why-can-we-use-undefined-methods-such-as-m.groupid?">Why can we use undefined methods such as m.groupId?</h4>
 
 <hr/>
 
@@ -212,24 +221,26 @@
 
 <p>If you don&rsquo;t want to use Type Dynamic, it&rsquo;s also possible to call <code>#field(String)</code> or <code>#column(String)</code> with String value. For instance, the following four examples mean the same thing.</p>
 <pre class="highlight java"><span class="n">m</span><span class="o">.</span><span class="na">groupId</span>
-<span class="n">m</span><span class="o">.</span><span class="na">field</span><span class="o">(</span><span class="s">&quot;groupId&quot;</span><span class="o">)</span>
-<span class="n">m</span><span class="o">.</span><span class="na">column</span><span class="o">(</span><span class="s">&quot;group_id&quot;</span><span class="o">)</span>
-<span class="n">m</span><span class="o">.</span><span class="na">c</span><span class="o">(</span><span class="s">&quot;group_id&quot;</span><span class="o">)</span>
+<span class="n">m</span><span class="o">.</span><span class="na">field</span><span class="o">(</span><span class="s">"groupId"</span><span class="o">)</span>
+<span class="n">m</span><span class="o">.</span><span class="na">column</span><span class="o">(</span><span class="s">"group_id"</span><span class="o">)</span>
+<span class="n">m</span><span class="o">.</span><span class="na">c</span><span class="o">(</span><span class="s">"group_id"</span><span class="o">)</span>
 </pre>
-<p>In some cases, you might want to avoid expose column names to application layer. If this is the case, override <code>nameConverters</code>. If you want to treat <code>service_cd</code> column as <code>serviceCode</code>, define regular expression and replaced name in columns as follows. Since the <code>nameConverters</code> works as partial match retrieval, it&rsquo;s also possible to specify just <code>Map(&quot;Code&quot; -> &quot;cd&quot;)</code>.</p>
+
+<p>In some cases, you might want to avoid expose column names to application layer. If this is the case, override <code>nameConverters</code>. If you want to treat <code>service_cd</code> column as <code>serviceCode</code>, define regular expression and replaced name in columns as follows. Since the <code>nameConverters</code> works as partial match retrieval, it&rsquo;s also possible to specify just <code>Map(&quot;Code&quot; -&gt; &quot;cd&quot;)</code>.</p>
 <pre class="highlight java"><span class="k">case</span> <span class="kd">class</span> <span class="nf">Event</span><span class="p">(</span><span class="nl">id:</span> <span class="n">Long</span><span class="o">,</span> <span class="nl">name:</span> <span class="n">String</span><span class="o">,</span> <span class="nl">serviceCode:</span> <span class="n">Long</span><span class="o">)</span>
 
 <span class="n">object</span> <span class="n">Event</span> <span class="kd">extends</span> <span class="n">SQLSyntaxSupport</span><span class="o">[</span><span class="n">Event</span><span class="o">]</span> <span class="o">{</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">&quot;events&quot;</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">Seq</span><span class="o">(</span><span class="s">&quot;id&quot;</span> <span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="s">&quot;service_cd&quot;</span><span class="o">)</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">"events"</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">columns</span> <span class="o">=</span> <span class="n">Seq</span><span class="o">(</span><span class="s">"id"</span> <span class="s">"name"</span><span class="o">,</span> <span class="s">"service_cd"</span><span class="o">)</span>
 
   <span class="c1">// specify regular expression to match</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">nameConverters</span> <span class="o">=</span> <span class="n">Map</span><span class="o">(</span><span class="s">&quot;^serviceCode$&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;service_cd&quot;</span><span class="o">)</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">nameConverters</span> <span class="o">=</span> <span class="n">Map</span><span class="o">(</span><span class="s">"^serviceCode$"</span> <span class="o">-&gt;</span> <span class="s">"service_cd"</span><span class="o">)</span>
 <span class="o">}</span>
 </pre>
+
 <hr/>
 
-<h4 id="toc_6">What is the difference between m.id, m.result.id and m.resultName.id?</h4>
+<h4 id="what-is-the-difference-between-m.id,-m.result.id-and-m.resultname.id?">What is the difference between m.id, m.result.id and m.resultName.id?</h4>
 
 <hr/>
 
@@ -246,38 +257,43 @@
 <p>If you use <code>Member.syntax()</code>, tableName will be set. For example,  <code>m.result.groupId</code> will be <code>&quot;members.group_id as gi_on_members&quot;</code>. If you specified as <code>Member.syntax(&quot;m&quot;)</code>, <code>m.result.groupId</code> will be <code>&quot;members.group_id as gi_on_m&quot;</code>.</p>
 
 <p>That&rsquo;s all the rules of <code>SQLSyntaxSupport</code>. I believed that now the following code will be easy to understand for you.</p>
-<pre class="highlight java"><span class="n">val</span> <span class="nl">ids:</span> <span class="n">List</span><span class="o">[</span><span class="n">Long</span><span class="o">]</span> <span class="o">=</span> <span class="n">sql</span><span class="s">&quot;select ${m.result.id} from ${Member.as(m)} where ${m.gourpId} = 1&quot;</span>
+<pre class="highlight java"><span class="n">val</span> <span class="nl">ids:</span> <span class="n">List</span><span class="o">[</span><span class="n">Long</span><span class="o">]</span> <span class="o">=</span> <span class="n">sql</span><span class="s">"select ${m.result.id} from ${Member.as(m)} where ${m.gourpId} = 1"</span>
   <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">rs</span> <span class="o">=&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="na">long</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="na">resultName</span><span class="o">.</span><span class="na">id</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 </pre>
+
 <p>Define <code>#apply(ResultName[Member])</code> method and the method will make your <code>#map</code> operation pretty simple.</p>
 <pre class="highlight java"><span class="n">object</span> <span class="n">Member</span> <span class="kd">extends</span> <span class="n">SQLSyntaxSupport</span><span class="o">[</span><span class="n">Member</span><span class="o">]</span> <span class="o">{</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">&quot;members&quot;</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">"members"</span>
   <span class="n">def</span> <span class="n">apply</span><span class="o">(</span><span class="nl">m:</span> <span class="n">ResultName</span><span class="o">[</span><span class="n">User</span><span class="o">])(</span><span class="nl">rs:</span> <span class="n">WrappedResultSet</span><span class="o">)</span> <span class="o">=</span> <span class="o">{</span>
     <span class="k">new</span> <span class="n">Member</span><span class="o">(</span><span class="n">id</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">long</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="na">id</span><span class="o">),</span> <span class="n">name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">string</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="na">name</span><span class="o">))</span>
   <span class="o">}</span>
 <span class="o">}</span>
 </pre>
+
 <p>Use the above code like this:</p>
-<pre class="highlight java"><span class="n">val</span> <span class="n">m</span> <span class="o">=</span> <span class="n">Member</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">&quot;m&quot;</span><span class="o">)</span>
-<span class="n">val</span> <span class="n">members</span> <span class="o">=</span> <span class="n">sql</span><span class="s">&quot;select ${m.result.*} from ${Member.as(m)}&quot;</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">Member</span><span class="o">(</span><span class="n">m</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
+<pre class="highlight java"><span class="n">val</span> <span class="n">m</span> <span class="o">=</span> <span class="n">Member</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">"m"</span><span class="o">)</span>
+<span class="n">val</span> <span class="n">members</span> <span class="o">=</span> <span class="n">sql</span><span class="s">"select ${m.result.*} from ${Member.as(m)}"</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">Member</span><span class="o">(</span><span class="n">m</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 <span class="c1">// select m.id as i_on_m, m.name as n_on_m from members m</span>
 </pre>
+
 <p>If you need just column names for insert/update/delete queries, use <code>#column.{name}</code> like this:</p>
 <pre class="highlight java"><span class="n">val</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Member</span><span class="o">.</span><span class="na">column</span>
-<span class="n">sql</span><span class="s">&quot;insert into ${Member.table} (${c.name}, ${c.birthday}) values (${name}, ${birthday})&quot;</span>
+<span class="n">sql</span><span class="s">"insert into ${Member.table} (${c.name}, ${c.birthday}) values (${name}, ${birthday})"</span>
   <span class="o">.</span><span class="na">update</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 </pre>
+
 <p>Since <code>#column</code> is a member of <code>SQLSyntaxSupport[A]</code>, you can use <code>#column</code> in <code>Member</code> object:</p>
 <pre class="highlight java"><span class="n">object</span> <span class="n">Member</span> <span class="kd">extends</span> <span class="n">SQLSyntaxSupport</span><span class="o">[</span><span class="n">Member</span><span class="o">]</span> <span class="o">{</span>
   <span class="n">def</span> <span class="n">create</span><span class="o">(</span><span class="nl">name:</span> <span class="n">String</span><span class="o">,</span> <span class="nl">birthday:</span> <span class="n">LocalDate</span><span class="o">)(</span><span class="n">implicit</span> <span class="nl">s:</span> <span class="n">DBSession</span> <span class="o">=</span> <span class="n">AutoSession</span><span class="o">):</span> <span class="n">Member</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">val</span> <span class="n">id</span> <span class="o">=</span> <span class="n">sql</span><span class="s">&quot;insert into ${table} (${column.name}, ${column.birthday}) values (${name}, ${birthday})&quot;</span>
+    <span class="n">val</span> <span class="n">id</span> <span class="o">=</span> <span class="n">sql</span><span class="s">"insert into ${table} (${column.name}, ${column.birthday}) values (${name}, ${birthday})"</span>
       <span class="o">.</span><span class="na">updateAndReturnGeneratedKey</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
     <span class="n">Member</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">birthday</span><span class="o">)</span>
   <span class="o">}</span>
 </pre>
+
 <hr/>
 
-<h4 id="toc_7">Use Case: SQLSyntaxSupport with table sharding</h4>
+<h4 id="use-case:-sqlsyntaxsupport-with-table-sharding">Use Case: SQLSyntaxSupport with table sharding</h4>
 
 <hr/>
 
@@ -287,7 +303,7 @@
 <span class="kd">class</span> <span class="nf">OrderTable</span><span class="p">(</span><span class="n">val</span> <span class="nl">year:</span> <span class="n">Int</span><span class="o">)</span> <span class="kd">extends</span> <span class="n">SQLSyntaxSupport</span><span class="o">[</span><span class="n">Order</span><span class="o">]</span> <span class="o">{</span>
   <span class="c1">// Be careful if you build tableName with input values </span>
   <span class="c1">// ScalikeJDBC cannot protect your app from SQL injection vulnerability</span>
-  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="n">s</span><span class="s">&quot;orders_$year&quot;</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="n">s</span><span class="s">"orders_$year"</span>
 
   <span class="n">def</span> <span class="n">apply</span><span class="o">(</span><span class="nl">o:</span> <span class="n">ResultName</span><span class="o">[</span><span class="n">Order</span><span class="o">])(</span><span class="nl">rs:</span> <span class="n">WrappedResultSet</span><span class="o">)</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Order</span><span class="o">(</span>
     <span class="n">id</span>         <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="na">long</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="na">id</span><span class="o">),</span> 
@@ -299,22 +315,47 @@
 <span class="n">val</span> <span class="o">(</span><span class="n">o2011</span><span class="o">,</span> <span class="n">o2012</span><span class="o">,</span> <span class="n">o2013</span><span class="o">)</span> <span class="o">=</span> <span class="o">(</span><span class="k">new</span> <span class="n">OrderTable</span><span class="o">(</span><span class="mi">2011</span><span class="o">),</span> <span class="k">new</span> <span class="n">OrderTable</span><span class="o">(</span><span class="mi">2012</span><span class="o">),</span> <span class="k">new</span> <span class="n">OrderTable</span><span class="o">(</span><span class="mi">2013</span><span class="o">))</span>
 
 <span class="n">val</span> <span class="n">ordersIn2011</span> <span class="o">=</span> <span class="n">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="n">implicit</span> <span class="n">s</span> <span class="o">=&gt;</span>
-  <span class="n">val</span> <span class="n">o</span> <span class="o">=</span> <span class="n">o2011</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">&quot;o&quot;</span><span class="o">)</span>
-  <span class="n">sql</span><span class="s">&quot;select ${o.result.*} from ${o2011 as o) where ${o.customerId} is not null&quot;</span>
+  <span class="n">val</span> <span class="n">o</span> <span class="o">=</span> <span class="n">o2011</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">"o"</span><span class="o">)</span>
+  <span class="n">sql</span><span class="s">"select ${o.result.*} from ${o2011 as o) where ${o.customerId} is not null"</span>
     <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">o2011</span><span class="o">(</span><span class="n">o</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 <span class="o">}</span>
 <span class="n">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="n">implicit</span> <span class="n">s</span> <span class="o">=&gt;</span>
-  <span class="n">val</span> <span class="n">o2</span> <span class="o">=</span> <span class="n">o2012</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">&quot;o&quot;</span><span class="o">)</span>
+  <span class="n">val</span> <span class="n">o2</span> <span class="o">=</span> <span class="n">o2012</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">"o"</span><span class="o">)</span>
   <span class="n">val</span> <span class="n">ordersIn2012</span> <span class="o">=</span> 
-    <span class="n">sql</span><span class="s">&quot;select ${o.result.*} from ${o2012 as o2) where ${o.customerId} is not null&quot;</span>
+    <span class="n">sql</span><span class="s">"select ${o.result.*} from ${o2012 as o2) where ${o.customerId} is not null"</span>
       <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">o2012</span><span class="o">(</span><span class="n">o2</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 
-  <span class="n">val</span> <span class="n">o3</span> <span class="o">=</span> <span class="n">o2013</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">&quot;o&quot;</span><span class="o">)</span>
+  <span class="n">val</span> <span class="n">o3</span> <span class="o">=</span> <span class="n">o2013</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">"o"</span><span class="o">)</span>
   <span class="n">val</span> <span class="n">ordersIn2013</span> <span class="o">=</span> 
-    <span class="n">sql</span><span class="s">&quot;select ${o.result.*} from ${o2013 as o3) where ${o.customerId} is not null&quot;</span>
+    <span class="n">sql</span><span class="s">"select ${o.result.*} from ${o2013 as o3) where ${o.customerId} is not null"</span>
       <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">o2013</span><span class="o">(</span><span class="n">o3</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 <span class="o">}</span>
 </pre>
+
+<hr/>
+
+<h4 id="use-case:-working-with-22+-columns-table">Use Case: Working with 22+ columns table</h4>
+
+<hr/>
+
+<p>Just use normal class and implement <code>EntityEquality</code> trait (for one-to-many relations).</p>
+<pre class="highlight java"><span class="kn">import</span> <span class="nn">scalikekdbc._</span><span class="o">,</span> <span class="n">SQLInterpolation</span><span class="o">.</span><span class="na">_</span>
+
+<span class="kd">class</span> <span class="nf">HugeTable</span><span class="p">(</span>
+  <span class="n">val</span> <span class="nl">column1:</span> <span class="n">Long</span><span class="o">,</span>
+  <span class="n">val</span> <span class="nl">column2:</span> <span class="n">Option</span><span class="o">[</span><span class="n">String</span><span class="o">],</span>
+  <span class="n">val</span> <span class="nl">column3:</span> <span class="n">String</span><span class="o">,</span>
+  <span class="n">val</span> <span class="nl">column4:</span> <span class="n">Int</span><span class="o">,</span>
+  <span class="n">val</span> <span class="nl">column5:</span> <span class="n">DateTime</span><span class="o">,</span>
+  <span class="o">...</span>
+  <span class="n">val</span> <span class="nl">column22:</span> <span class="n">Int</span><span class="o">,</span>
+  <span class="n">val</span> <span class="nl">column23:</span> <span class="n">DateTime</span><span class="o">)</span> <span class="kd">extends</span> <span class="n">EntityEquality</span> <span class="o">{</span>
+
+  <span class="n">override</span> <span class="n">val</span> <span class="n">entityIdentity</span> <span class="o">=</span> <span class="n">Seq</span><span class="o">(</span><span class="n">column1</span><span class="o">,</span> <span class="n">columns2</span><span class="o">,</span> <span class="o">..,</span> <span class="n">columns23</span><span class="o">).</span><span class="na">mkString</span><span class="o">(</span><span class="s">"\t"</span><span class="o">)</span>
+
+<span class="o">}</span>
+</pre>
+
             <hr/>
             <div class="alert alert-info small"> 
               If this webpage has typo or something wrong, Please report or fix. <a href="/contribution.html">How?</a>
