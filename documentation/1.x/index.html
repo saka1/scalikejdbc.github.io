@@ -27,32 +27,29 @@
     </div>
         <div class="col-xs-2">
           <div class="content small">
-            <h5>Latest version</h5>
+            <h5>version 1.x</h5>
             <hr/>
-            <p><a href="/documentation/setup.html">Setup</a></p>
-            <p><a href="/documentation/configuration.html">Configuration</a></p>
-            <p><a href="/documentation/connection-pool.html">Connection Pool</a></p>
-            <p><a href="/documentation/operations.html">Operations</a></p>
-            <p><a href="/documentation/transaction.html">Transaction</a></p>
-            <p><a href="/documentation/auto-session.html">Auto Session</a></p>
-            <p><a href="/documentation/sql-interpolation.html">SQLInterpolation</a></p>
-            <p><a href="/documentation/query-dsl.html">QueryDSL</a></p>
-            <p><a href="/documentation/one-to-x.html">One-to-x API</a></p>
-            <p><a href="/documentation/query-inspector.html">Query Inspector</a></p>
-            <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
-            <p><a href="/documentation/testing.html">Testing</a></p>
-            <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
-            <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
-            <p><a href="/contribution.html">Contribution</a></p>
+            <p><a href="/documentation/1.x/setup.html">Setup</a></p>
+            <p><a href="/documentation/1.x/configuration.html">Configuration</a></p>
+            <p><a href="/documentation/1.x/connection-pool.html">Connection Pool</a></p>
+            <p><a href="/documentation/1.x/operations.html">Operations</a></p>
+            <p><a href="/documentation/1.x/transaction.html">Transaction</a></p>
+            <p><a href="/documentation/1.x/auto-session.html">Auto Session</a></p>
+            <p><a href="/documentation/1.x/sql-interpolation.html">SQLInterpolation</a></p>
+            <p><a href="/documentation/1.x/query-dsl.html">QueryDSL</a></p>
+            <p><a href="/documentation/1.x/one-to-x.html">One-to-x API</a></p>
+            <p><a href="/documentation/1.x/query-inspector.html">Query Inspector</a></p>
+            <p><a href="/documentation/1.x/reverse-engineering.html">Reverse Engineering</a></p>
+            <p><a href="/documentation/1.x/testing.html">Testing</a></p>
+            <p><a href="/documentation/1.x/playframework-support.html">Play2 Support</a></p>
+            <p><a href="/documentation/1.x/dbconsole.html">dbconsole</a></p>
+            <p><a href="/documentation/1.x/contribution.html">Contribution</a></p>
           </div>
         </div>
         <div class="col-xs-10">
           <div class="content">
 <a href="https://github.com/scalikejdbc/scalikejdbc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
-<div class="alert alert-info">
-Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user, visit <a href="http://localhost:4567/documentation/1.x/">here</a>.
-</div>
-            <h1 id="scalikejdbc">ScalikeJDBC</h1>
+            <h1 id="scalikejdbc-1.7.7">ScalikeJDBC 1.7.7</h1>
 
 <hr/>
 
@@ -115,28 +112,12 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <hr/>
 
 <p>All you need to do is just adding ScalikeJDBC, JDBC driver &amp; slf4j implementation. </p>
-
-<h3 id="scalikejdbc-1.7">ScalikeJDBC 1.7</h3>
-
-<p>See <a href="/documentation/1.x/">ScalikeJDBC 1.7 Documentation</a> in detail.</p>
-<pre class="highlight scala"><span class="c1">// Scala 2.9, 2.10
-</span><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>               <span class="o">%</span> <span class="s">"1.7.7"</span><span class="o">,</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-interpolation"</span> <span class="o">%</span> <span class="s">"1.7.7"</span><span class="o">,</span>
-  <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                        <span class="o">%</span> <span class="s">"1.4.177"</span><span class="o">,</span>
-  <span class="s">"ch.qos.logback"</span>  <span class="o">%</span>  <span class="s">"logback-classic"</span>           <span class="o">%</span> <span class="s">"1.1.2"</span>
-<span class="o">)</span>
-</pre>
-
-<h3 id="scalikejdbc-2.0">ScalikeJDBC 2.0</h3>
-
-<p>See <a href="/">ScalikeJDBC 2.0 Documentation</a> in detail.</p>
-<pre class="highlight scala"><span class="c1">// Scala 2.10, 2.11
-</span><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>       <span class="o">%</span> <span class="s">"2.0.0-RC3"</span><span class="o">,</span>
-  <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                <span class="o">%</span> <span class="s">"1.4.177"</span><span class="o">,</span>
-  <span class="s">"ch.qos.logback"</span>  <span class="o">%</span>  <span class="s">"logback-classic"</span>   <span class="o">%</span> <span class="s">"1.1.2"</span>
-<span class="o">)</span>
+<pre class="highlight plaintext">libraryDependencies ++= Seq(
+  "org.scalikejdbc" %% "scalikejdbc"               % "1.7.7",
+  "org.scalikejdbc" %% "scalikejdbc-interpolation" % "1.7.7",
+  "com.h2database"  %  "h2"                        % "1.4.177",
+  "ch.qos.logback"  %  "logback-classic"           % "1.1.2"
+)
 </pre>
 
 <hr/>
@@ -162,45 +143,43 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <hr/>
 
 <p>Put above dependencies into your <code>build.sbt</code> and run <code>sbt console</code> now.</p>
-<pre class="highlight scala"><span class="c1">// ScalikeJDBC 1.7 requires SQLInterpolation._ import
-//import scalikejdbc._, SQLInterpolation._
-</span><span class="k">import</span> <span class="nn">scalikejdbc._</span>
+<pre class="highlight java"><span class="kn">import</span> <span class="nn">scalikejdbc._</span><span class="o">,</span> <span class="n">SQLInterpolation</span><span class="o">.</span><span class="na">_</span>
 
-<span class="c1">// initialize JDBC driver &amp; connection pool
-</span><span class="nc">Class</span><span class="o">.</span><span class="n">forName</span><span class="o">(</span><span class="s">"org.h2.Driver"</span><span class="o">)</span>
-<span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">singleton</span><span class="o">(</span><span class="s">"jdbc:h2:mem:hello"</span><span class="o">,</span> <span class="s">"user"</span><span class="o">,</span> <span class="s">"pass"</span><span class="o">)</span>
+<span class="c1">// initialize JDBC driver &amp; connection pool</span>
+<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"org.h2.Driver"</span><span class="o">)</span>
+<span class="n">ConnectionPool</span><span class="o">.</span><span class="na">singleton</span><span class="o">(</span><span class="s">"jdbc:h2:mem:hello"</span><span class="o">,</span> <span class="s">"user"</span><span class="o">,</span> <span class="s">"pass"</span><span class="o">)</span>
 
-<span class="c1">// ad-hoc session provider on the REPL
-</span><span class="k">implicit</span> <span class="k">val</span> <span class="n">session</span> <span class="k">=</span> <span class="nc">AutoSession</span>
+<span class="c1">// ad-hoc session provider on the REPL</span>
+<span class="n">implicit</span> <span class="n">val</span> <span class="n">session</span> <span class="o">=</span> <span class="n">AutoSession</span>
 
-<span class="c1">// table creation, you can run DDL by using #execute as same as JDBC
-</span><span class="n">sql</span><span class="s">"""
+<span class="c1">// table creation, you can run DDL by using #execute as same as JDBC</span>
+<span class="n">sql</span><span class="s">"""
 create table members (
   id serial not null primary key, 
   name varchar(64), 
   created_at timestamp not null
 )
-"""</span><span class="o">.</span><span class="n">execute</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+"""</span><span class="o">.</span><span class="na">execute</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 
-<span class="c1">// insert initial data
-</span><span class="nc">Seq</span><span class="o">(</span><span class="s">"Alice"</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="s">"Chris"</span><span class="o">)</span> <span class="n">foreach</span> <span class="o">{</span> <span class="n">name</span> <span class="k">=&gt;</span>
-  <span class="n">sql</span><span class="s">"insert into members (name, created_at) values (${name}, current_timestamp)"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+<span class="c1">// insert initial data</span>
+<span class="n">Seq</span><span class="o">(</span><span class="s">"Alice"</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="s">"Chris"</span><span class="o">)</span> <span class="n">foreach</span> <span class="o">{</span> <span class="n">name</span> <span class="o">=&gt;</span>
+  <span class="n">sql</span><span class="s">"insert into members (name, created_at) values (${name}, current_timestamp)"</span><span class="o">.</span><span class="na">update</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 <span class="o">}</span>
 
-<span class="c1">// for now, retrieves all data as Map value 
-</span><span class="k">val</span> <span class="n">entities</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">]]</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select * from members"</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">toMap</span><span class="o">).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+<span class="c1">// for now, retrieves all data as Map value </span>
+<span class="n">val</span> <span class="nl">entities:</span> <span class="n">List</span><span class="o">[</span><span class="n">Map</span><span class="o">[</span><span class="n">String</span><span class="o">,</span> <span class="n">Any</span><span class="o">]]</span> <span class="o">=</span> <span class="n">sql</span><span class="s">"select * from members"</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">_</span><span class="o">.</span><span class="na">toMap</span><span class="o">).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 
-<span class="c1">// defines entity object and extractor
-</span><span class="k">import</span> <span class="nn">org.joda.time._</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">Member</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span> <span class="n">createdAt</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">)</span>
-<span class="k">object</span> <span class="nc">Member</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">override</span> <span class="k">val</span> <span class="n">tableName</span> <span class="k">=</span> <span class="s">"members"</span>
-  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">)</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Member</span><span class="o">(</span>
-    <span class="n">rs</span><span class="o">.</span><span class="n">long</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="n">rs</span><span class="o">.</span><span class="n">stringOpt</span><span class="o">(</span><span class="s">"name"</span><span class="o">),</span> <span class="n">rs</span><span class="o">.</span><span class="n">dateTime</span><span class="o">(</span><span class="s">"created_at"</span><span class="o">))</span>
+<span class="c1">// defines entity object and extractor</span>
+<span class="kn">import</span> <span class="nn">org.joda.time._</span>
+<span class="k">case</span> <span class="kd">class</span> <span class="nf">Member</span><span class="p">(</span><span class="nl">id:</span> <span class="n">Long</span><span class="o">,</span> <span class="nl">name:</span> <span class="n">Option</span><span class="o">[</span><span class="n">String</span><span class="o">],</span> <span class="nl">createdAt:</span> <span class="n">DateTime</span><span class="o">)</span>
+<span class="n">object</span> <span class="n">Member</span> <span class="kd">extends</span> <span class="n">SQLSyntaxSupport</span><span class="o">[</span><span class="n">Member</span><span class="o">]</span> <span class="o">{</span>
+  <span class="n">override</span> <span class="n">val</span> <span class="n">tableName</span> <span class="o">=</span> <span class="s">"members"</span>
+  <span class="n">def</span> <span class="n">apply</span><span class="o">(</span><span class="nl">rs:</span> <span class="n">WrappedResultSet</span><span class="o">)</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Member</span><span class="o">(</span>
+    <span class="n">rs</span><span class="o">.</span><span class="na">long</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="n">rs</span><span class="o">.</span><span class="na">stringOpt</span><span class="o">(</span><span class="s">"name"</span><span class="o">),</span> <span class="n">rs</span><span class="o">.</span><span class="na">dateTime</span><span class="o">(</span><span class="s">"created_at"</span><span class="o">))</span>
 <span class="o">}</span>
 
-<span class="c1">// find all members
-</span><span class="k">val</span> <span class="n">members</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select * from members"</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="nc">Member</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+<span class="c1">// find all members</span>
+<span class="n">val</span> <span class="nl">members:</span> <span class="n">List</span><span class="o">[</span><span class="n">Member</span><span class="o">]</span> <span class="o">=</span> <span class="n">sql</span><span class="s">"select * from members"</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">rs</span> <span class="o">=&gt;</span> <span class="n">Member</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="na">list</span><span class="o">.</span><span class="na">apply</span><span class="o">()</span>
 </pre>
 
 <p>How did it go? If you&rsquo;d like to know more details or practical examples, see documentation.</p>
@@ -236,7 +215,7 @@ create table members (
 <span class="o">}</span>
 </pre>
 
-<p>See in detail: <a href="/documentation/operations.html">/documentation/operations</a></p>
+<p>See in detail: <a href="documentation/operations.html">/documentation/operations</a></p>
 
 <hr/>
 
@@ -260,7 +239,7 @@ create table members (
 <span class="o">}</span>
 </pre>
 
-<p>See in detail: <a href="/documentation/query-dsl.html">/documentation/query-dsl</a></p>
+<p>See in detail: <a href="documentation/query-dsl.html">/documentation/query-dsl</a></p>
 
 <p>Test code: <a href="https://github.com/scalikejdbc/scalikejdbc/blob/master/scalikejdbc-interpolation/src/test/scala/scalikejdbc/QueryInterfaceSpec.scala">src/test/scala/scalikejdbc/QueryInterfaceSpec.scala</a></p>
 
@@ -298,7 +277,7 @@ create table members (
 <span class="o">}</span>
 </pre>
 
-<p>See in detail: <a href="/documentation/transaction.html">/documentation/transaction</a></p>
+<p>See in detail: <a href="documentation/transaction.html">/documentation/transaction</a></p>
 
 <hr/>
 
@@ -318,7 +297,7 @@ create table members (
     controllers.Secured$$anonfun$IsAuthenticated$3$$anonfun$apply$3.apply(Application.scala:88)
 </pre>
 
-<p>See in detail: <a href="/documentation/query-inspector.html">/documentation/query-inspector</a></p>
+<p>See in detail: <a href="documentation/query-inspector.html">/documentation/query-inspector</a></p>
 
 <hr/>
 
@@ -331,7 +310,7 @@ create table members (
 <li>Testing with fixtures</li>
 </ul>
 
-<p>See in detail: <a href="/documentation/testing.html">/documentation/testing</a></p>
+<p>See in detail: <a href="documentation/testing.html">/documentation/testing</a></p>
 
 <hr/>
 
@@ -346,7 +325,7 @@ create table members (
 sbt "scalikejdbc-gen companies Company"
 </pre>
 
-<p>See in detail: <a href="/documentation/reverse-engineering.html">/documentation/reverse-engineering</a></p>
+<p>See in detail: <a href="documentation/reverse-engineering.html">/documentation/reverse-engineering</a></p>
 
 <hr/>
 
@@ -354,7 +333,7 @@ sbt "scalikejdbc-gen companies Company"
 
 <p>You can use ScalikeJDBC with Play framework 2 seamlessly. We promise you that it becomes more productive when using together with scalikejdbc-mapper-generator.</p>
 
-<p>See in detail: <a href="/documentation/playframework-support.html">/documentation/playframework-support</a></p>
+<p>See in detail: <a href="documentation/playframework-support.html">/documentation/playframework-support</a></p>
 
 <p><img alt="Play framework" src="/images/play.png" /></p>
 
@@ -398,7 +377,7 @@ http://www.apache.org/licenses/LICENSE-2.0.html
 <pre class="highlight plaintext">http://git.io/dbconsole.bat
 </pre>
 
-<p>See in detail: <a href="/documentation/dbconsole.html">/documentation/dbconsole</a></p>
+<p>See in detail: <a href="documentation/dbconsole.html">/documentation/dbconsole</a></p>
 
 <hr/>
 

@@ -27,31 +27,28 @@
     </div>
         <div class="col-xs-2">
           <div class="content small">
-            <h5>Latest version</h5>
+            <h5>version 1.x</h5>
             <hr/>
-            <p><a href="/documentation/setup.html">Setup</a></p>
-            <p><a href="/documentation/configuration.html">Configuration</a></p>
-            <p><a href="/documentation/connection-pool.html">Connection Pool</a></p>
-            <p><a href="/documentation/operations.html">Operations</a></p>
-            <p><a href="/documentation/transaction.html">Transaction</a></p>
-            <p><a href="/documentation/auto-session.html">Auto Session</a></p>
-            <p><a href="/documentation/sql-interpolation.html">SQLInterpolation</a></p>
-            <p><a href="/documentation/query-dsl.html">QueryDSL</a></p>
-            <p><a href="/documentation/one-to-x.html">One-to-x API</a></p>
-            <p><a href="/documentation/query-inspector.html">Query Inspector</a></p>
-            <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
-            <p><a href="/documentation/testing.html">Testing</a></p>
-            <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
-            <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
-            <p><a href="/contribution.html">Contribution</a></p>
+            <p><a href="/documentation/1.x/setup.html">Setup</a></p>
+            <p><a href="/documentation/1.x/configuration.html">Configuration</a></p>
+            <p><a href="/documentation/1.x/connection-pool.html">Connection Pool</a></p>
+            <p><a href="/documentation/1.x/operations.html">Operations</a></p>
+            <p><a href="/documentation/1.x/transaction.html">Transaction</a></p>
+            <p><a href="/documentation/1.x/auto-session.html">Auto Session</a></p>
+            <p><a href="/documentation/1.x/sql-interpolation.html">SQLInterpolation</a></p>
+            <p><a href="/documentation/1.x/query-dsl.html">QueryDSL</a></p>
+            <p><a href="/documentation/1.x/one-to-x.html">One-to-x API</a></p>
+            <p><a href="/documentation/1.x/query-inspector.html">Query Inspector</a></p>
+            <p><a href="/documentation/1.x/reverse-engineering.html">Reverse Engineering</a></p>
+            <p><a href="/documentation/1.x/testing.html">Testing</a></p>
+            <p><a href="/documentation/1.x/playframework-support.html">Play2 Support</a></p>
+            <p><a href="/documentation/1.x/dbconsole.html">dbconsole</a></p>
+            <p><a href="/documentation/1.x/contribution.html">Contribution</a></p>
           </div>
         </div>
         <div class="col-xs-10">
           <div class="content">
 <a href="https://github.com/scalikejdbc/scalikejdbc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
-<div class="alert alert-info">
-Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user, visit <a href="http://localhost:4567/documentation/1.x/">here</a>.
-</div>
             <h2 id="connection-pool">Connection Pool</h2>
 
 <hr/>
@@ -60,7 +57,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <hr/>
 
-<p>See <a href="/documentation/configuration.html">/documentation/configuration</a></p>
+<p>See <a href="/documentation/1.x/configuration.html">/documentation/1.x/configuration</a></p>
 
 <hr/>
 
@@ -201,52 +198,6 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <span class="k">implicit</span> <span class="k">val</span> <span class="n">factory</span> <span class="k">=</span> <span class="n">C3P0ConnectionPoolFactory</span>
 <span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'xxxx,</span> <span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">)</span>
-</pre>
-
-<hr/>
-
-<h3 id="switching-connectionpool-implementation-by-configuration">Switching ConnectionPool Implementation by configuration</h3>
-
-<hr/>
-
-<p>When <code>ConnectionPoolFactory</code> implementation already exists, it&rsquo;s possible to specify it by configuration. By default, commons-dbcp and bonecp are already prepared. When you&rsquo;d like to add another <code>ConnectionPoolFactory</code>, call repository&rsquo;s add method like this:</p>
-<pre class="highlight scala"><span class="n">scalikejdbc</span><span class="o">.</span><span class="nc">ConnectionPoolFactoryRepository</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="nc">YourConnectionPoolFactory</span><span class="o">)</span>
-</pre>
-
-<hr/>
-
-<h4 id="default:-commons-dbcp">Default: commons-dbcp</h4>
-
-<p><a href="http://commons.apache.org/proper/commons-dbcp/">http://commons.apache.org/proper/commons-dbcp/</a></p>
-<pre class="highlight scala"><span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'dbcp,</span> <span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> 
-  <span class="nc">ConnectionPoolSettings</span><span class="o">(</span><span class="n">connectionPoolFactoryName</span> <span class="k">=</span> <span class="s">"commons-dbcp"</span><span class="o">))</span>
-</pre>
-
-<hr/>
-
-<h4 id="bonecp">BoneCP</h4>
-
-<p><a href="http://jolbox.com/">http://jolbox.com/</a></p>
-<pre class="highlight scala"><span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'bonecp,</span> <span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> 
-  <span class="nc">ConnectionPoolSettings</span><span class="o">(</span><span class="n">connectionPoolFactoryName</span> <span class="k">=</span> <span class="s">"bonecp"</span><span class="o">))</span>
-</pre>
-
-<hr/>
-
-<h4 id="hikaricp">HikariCP</h4>
-
-<p><a href="http://brettwooldridge.github.io/HikariCP/">http://brettwooldridge.github.io/HikariCP/</a></p>
-
-<p>HikariCP expects dataSourceClassName. So we recommend using DataSourceConnectionPool.</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">dataSource</span><span class="k">:</span> <span class="kt">DataSource</span> <span class="o">=</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="n">ds</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">HikariDataSource</span><span class="o">()</span>
-  <span class="n">ds</span><span class="o">.</span><span class="n">setDataSourceClassName</span><span class="o">(</span><span class="n">dataSourceClassName</span><span class="o">)</span>
-  <span class="n">ds</span><span class="o">.</span><span class="n">addDataSourceProperty</span><span class="o">(</span><span class="s">"url"</span><span class="o">,</span> <span class="n">url</span><span class="o">)</span>
-  <span class="n">ds</span><span class="o">.</span><span class="n">addDataSourceProperty</span><span class="o">(</span><span class="s">"user"</span><span class="o">,</span> <span class="n">user</span><span class="o">)</span>
-  <span class="n">ds</span><span class="o">.</span><span class="n">addDataSourceProperty</span><span class="o">(</span><span class="s">"password"</span><span class="o">,</span> <span class="n">password</span><span class="o">)</span>
-  <span class="n">ds</span>
-<span class="o">}</span>
-<span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'hikaricp,</span> <span class="k">new</span> <span class="nc">DataSourceConnectionPool</span><span class="o">(</span><span class="n">dataSource</span><span class="o">))</span>
 </pre>
 
             <hr/>
