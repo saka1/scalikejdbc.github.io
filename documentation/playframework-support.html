@@ -54,19 +54,36 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 </div>
             <h2 id="play-framework-support">Play Framework Support</h2>
 
-<hr/>
-
-<h3 id="how-to-setup">How to setup</h3>
-
-<p>See <a href="/documentation/setup.html">/documentation/setup</a>.</p>
+<p>ScalikeJDBC provides two Play plugins to integrate Play2 and ScalikeJDBC. Choose your preferred one.</p>
 
 <hr/>
 
-<h3 id="configuration">Configuration</h3>
+<h3 id="scalikejdbc-play-plugin">scalikejdbc-play-plugin</h3>
 
-<p>Here is some configuration examples. Basically it&rsquo;s very simple:</p>
+<hr/>
 
-<h4 id="conf/application.conf">conf/application.conf</h4>
+<p>This plugin supports connection pooling too. You don&rsquo;t need <code>dbplugin</code> and <code>evolutionplugin</code> when using this plugin.</p>
+
+<h5 id="project/build.scala">project/Build.scala</h5>
+<pre class="highlight scala"><span class="k">val</span> <span class="n">appDependencies</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>                       <span class="o">%</span> <span class="s">"&lt;%= version %&gt;"</span><span class="o">,</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-play-plugin"</span>           <span class="o">%</span> <span class="s">"&lt;%= latest_play_support_version %&gt;"</span><span class="o">,</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-play-fixture-plugin"</span>   <span class="o">%</span> <span class="s">"&lt;%= latest_play_support_version %&gt;"</span><span class="o">,</span> <span class="c1">// optional
+</span>  <span class="c1">// substitute this for whatever DB driver you're using:
+</span>  <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                                <span class="o">%</span> <span class="s">"&lt;%= h2_version %&gt;"</span>
+<span class="o">)</span>
+</pre>
+
+<h5 id="conf/play.plugins">conf/play.plugins</h5>
+<pre class="highlight plaintext">10000:scalikejdbc.PlayPlugin
+</pre>
+
+<p>If you use fixture-plugin too, PlayFixturePlugin should be loaded after PlayPlugin:</p>
+<pre class="highlight plaintext">10000:scalikejdbc.PlayPlugin
+11000:scalikejdbc.PlayFixturePlugin
+</pre>
+
+<h5 id="conf/application.conf">conf/application.conf</h5>
 <pre class="highlight shell"><span class="c"># Database configuration</span>
 <span class="c"># ~~~~~</span>
 <span class="c"># You can declare as many datasources as you want.</span>
@@ -96,6 +113,7 @@ scalikejdbc.global.loggingSQLAndTime.warningLogLevel<span class="o">=</span>warn
 <span class="c">#scalikejdbc.play.closeAllOnStop.enabled=true</span>
 
 <span class="c"># You can disable the default DB plugin</span>
+<span class="c"># Otherwise, don't disable dbplugin when you use scalikejdbc-play-dbplugin-adapter</span>
 <span class="nv">dbplugin</span><span class="o">=</span>disabled
 <span class="nv">evolutionplugin</span><span class="o">=</span>disabled
 
@@ -103,7 +121,39 @@ scalikejdbc.global.loggingSQLAndTime.warningLogLevel<span class="o">=</span>warn
 logger.scalikejdbc<span class="o">=</span>DEBUG
 </pre>
 
-<h4 id="fixtures">Fixtures</h4>
+<hr/>
+
+<h3 id="scalikejdbc-play-dbplugin-adapter">scalikejdbc-play-dbplugin-adapter</h3>
+
+<hr/>
+
+<p>This plugin is an adapter to connect <code>dbplugin</code> and ScalikeJDBC.</p>
+
+<h5 id="project/build.scala">project/Build.scala</h5>
+<pre class="highlight scala"><span class="k">val</span> <span class="n">appDependencies</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>                       <span class="o">%</span> <span class="s">"&lt;%= version %&gt;"</span><span class="o">,</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-play-dbplugin-adapter"</span> <span class="o">%</span> <span class="s">"&lt;%= latest_play_support_version %&gt;"</span><span class="o">,</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-play-fixture-plugin"</span>   <span class="o">%</span> <span class="s">"&lt;%= latest_play_support_version %&gt;"</span><span class="o">,</span> <span class="c1">// optional
+</span>  <span class="c1">// substitute this for whatever DB driver you're using:
+</span>  <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                                <span class="o">%</span> <span class="s">"&lt;%= h2_version %&gt;"</span>
+<span class="o">)</span>
+</pre>
+
+<h5 id="conf/play.plugins">conf/play.plugins</h5>
+<pre class="highlight plaintext">10000:scalikejdbc.PlayDBPluginAdapter
+</pre>
+
+<h5 id="conf/application.conf">conf/application.conf</h5>
+
+<p>Basically do same as play-plugin. </p>
+
+<p>NOTICE: Don&rsquo;t disable dbplugin.</p>
+
+<hr/>
+
+<h3 id="fixtures---playfixtureplugin">Fixtures - PlayFixturePlugin</h3>
+
+<hr/>
 
 <p>Fixtures are optional. If you don&rsquo;t nee, no need to use them.</p>
 
@@ -164,6 +214,8 @@ logger.scalikejdbc<span class="o">=</span>DEBUG
 <hr/>
 
 <h3 id="more-examples">More Examples</h3>
+
+<hr/>
 
 <p>Take a look at Typesafe Activator template:</p>
 
