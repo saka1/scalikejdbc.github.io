@@ -93,7 +93,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <span class="c1">// QueryDSL
 </span><span class="k">object</span> <span class="nc">Emp</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Emp</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">e</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">Emp</span><span class="o">])(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSEt</span><span class="o">)</span><span class="k">:</span> <span class="kt">Emp</span> <span class="o">=</span> 
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">e</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">Emp</span><span class="o">])(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSEt</span><span class="o">)</span><span class="k">:</span> <span class="kt">Emp</span> <span class="o">=</span>
     <span class="k">new</span> <span class="nc">Emp</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="o">),</span> <span class="n">name</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="o">))</span>
 <span class="o">}</span>
 <span class="k">val</span> <span class="n">e</span> <span class="k">=</span> <span class="nc">Emp</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"e"</span><span class="o">)</span>
@@ -102,7 +102,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <span class="o">}</span>
 </pre>
 
-<p>You can learn about QueryDSL in defail here: </p>
+<p>You can learn about QueryDSL in defail here:</p>
 
 <p><a href="documentation/query-dsl.html">/documentation/query-dsl</a></p>
 
@@ -159,6 +159,25 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <hr/>
 
+<h4 id="implementing-custom-extractor">Implementing Custom Extractor</h4>
+
+<hr/>
+
+<p>In some cases you might want to implement a custom extractor. This can be useful for testing out queries.</p>
+
+<p>This example shows how to preserve <code>null</code> values in a result set.</p>
+<pre class="highlight scala"><span class="k">def</span> <span class="n">toMap</span><span class="o">(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">)</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">]</span> <span class="k">=</span>  <span class="o">{</span>
+  <span class="o">(</span><span class="mi">1</span> <span class="n">to</span> <span class="n">rs</span><span class="o">.</span><span class="n">metaData</span><span class="o">.</span><span class="n">getColumnCount</span><span class="o">).</span><span class="n">foldLeft</span><span class="o">(</span><span class="nc">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">]())</span> <span class="o">{</span> <span class="o">(</span><span class="n">result</span><span class="o">,</span> <span class="n">i</span><span class="o">)</span> <span class="k">=&gt;</span>
+    <span class="k">val</span> <span class="n">label</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">metaData</span><span class="o">.</span><span class="n">getColumnLabel</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+    <span class="nc">Some</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">any</span><span class="o">(</span><span class="n">label</span><span class="o">)).</span><span class="n">map</span> <span class="o">{</span> <span class="n">nullableValue</span> <span class="k">=&gt;</span> <span class="n">result</span> <span class="o">+</span> <span class="o">(</span><span class="n">label</span> <span class="o">-&gt;</span> <span class="n">nullableValue</span><span class="o">)</span> <span class="o">}.</span><span class="n">getOrElse</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">sql</span><span class="s">"select * from emp"</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="n">toMap</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="n">single</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+</pre>
+
+<hr/>
+
 <h3 id="update-api">Update API</h3>
 
 <hr/>
@@ -177,15 +196,15 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <span class="k">val</span> <span class="n">column</span> <span class="k">=</span> <span class="nc">Emp</span><span class="o">.</span><span class="n">column</span>
 <span class="nc">DB</span> <span class="n">localTx</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">s</span> <span class="k">=&gt;</span>
-  <span class="n">withSQL</span> <span class="o">{</span> 
+  <span class="n">withSQL</span> <span class="o">{</span>
     <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Emp</span><span class="o">).</span><span class="n">namedValues</span><span class="o">(</span>
       <span class="n">column</span><span class="o">.</span><span class="n">id</span> <span class="o">-&gt;</span> <span class="n">id</span><span class="o">,</span>
       <span class="n">column</span><span class="o">.</span><span class="n">name</span> <span class="o">-&gt;</span> <span class="n">name</span><span class="o">,</span>
       <span class="n">column</span><span class="o">.</span><span class="n">createdAt</span> <span class="o">-&gt;</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">)</span>
    <span class="o">}.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 
-  <span class="k">val</span> <span class="n">id</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="n">withSQL</span> <span class="o">{</span> 
-    <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Empy</span><span class="o">).</span><span class="n">namedValues</span><span class="o">(</span><span class="n">column</span><span class="o">.</span><span class="n">name</span> <span class="o">-&gt;</span> <span class="n">name</span><span class="o">,</span> <span class="n">column</span><span class="o">.</span><span class="n">createdAt</span> <span class="o">-&gt;</span> <span class="n">sqls</span><span class="o">.</span><span class="n">currentTimestamp</span><span class="o">)</span> 
+  <span class="k">val</span> <span class="n">id</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="n">withSQL</span> <span class="o">{</span>
+    <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Empy</span><span class="o">).</span><span class="n">namedValues</span><span class="o">(</span><span class="n">column</span><span class="o">.</span><span class="n">name</span> <span class="o">-&gt;</span> <span class="n">name</span><span class="o">,</span> <span class="n">column</span><span class="o">.</span><span class="n">createdAt</span> <span class="o">-&gt;</span> <span class="n">sqls</span><span class="o">.</span><span class="n">currentTimestamp</span><span class="o">)</span>
   <span class="o">}.</span><span class="n">updateAndReturnGeneratedKey</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 
   <span class="n">withSQL</span> <span class="o">{</span> <span class="n">update</span><span class="o">(</span><span class="nc">Emp</span><span class="o">).</span><span class="n">set</span><span class="o">(</span><span class="n">column</span><span class="o">.</span><span class="n">name</span> <span class="o">-&gt;</span> <span class="n">newName</span><span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="n">column</span><span class="o">.</span><span class="n">id</span><span class="o">,</span> <span class="n">id</span><span class="o">)</span> <span class="o">}.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
@@ -225,7 +244,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <span class="k">val</span> <span class="n">column</span> <span class="k">=</span> <span class="nc">Emp</span><span class="o">.</span><span class="n">column</span>
 <span class="nc">DB</span> <span class="n">localTx</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
   <span class="k">val</span> <span class="n">batchParams</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Seq</span><span class="o">[</span><span class="kt">Any</span><span class="o">]]</span> <span class="k">=</span> <span class="o">(</span><span class="mi">2001</span> <span class="n">to</span> <span class="mi">3000</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="n">i</span> <span class="k">=&gt;</span> <span class="nc">Seq</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="s">"name"</span> <span class="o">+</span> <span class="n">i</span><span class="o">))</span>
-  <span class="n">withSQL</span> <span class="o">{</span> 
+  <span class="n">withSQL</span> <span class="o">{</span>
     <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Emp</span><span class="o">).</span><span class="n">namedValues</span><span class="o">(</span><span class="n">column</span><span class="o">.</span><span class="n">id</span> <span class="o">-&gt;</span> <span class="n">sqls</span><span class="o">.?,</span> <span class="n">column</span><span class="o">.</span><span class="n">name</span> <span class="o">-&gt;</span> <span class="n">sqls</span><span class="o">.?)</span>
   <span class="o">}.</span><span class="n">batch</span><span class="o">(</span><span class="n">batchParams</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">).</span><span class="n">apply</span><span class="o">()</span>
 <span class="o">}</span>
