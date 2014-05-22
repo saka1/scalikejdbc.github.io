@@ -105,8 +105,8 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
   <span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">name</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">DataSource</span><span class="o">]</span>
 
 <span class="k">import</span> <span class="nn">scalikejdbc._</span>
-<span class="nc">ConnnectionPool</span><span class="o">.</span><span class="n">singleton</span><span class="o">(</span><span class="k">new</span> <span class="nc">DataSourceConnectionPool</span><span class="o">(</span><span class="n">ds</span><span class="o">))</span>
-<span class="nc">ConnnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'foo,</span> <span class="k">new</span> <span class="nc">DataSourceConnectionPool</span><span class="o">(</span><span class="n">ds</span><span class="o">))</span>
+<span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">singleton</span><span class="o">(</span><span class="k">new</span> <span class="nc">DataSourceConnectionPool</span><span class="o">(</span><span class="n">ds</span><span class="o">))</span>
+<span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'foo,</span> <span class="k">new</span> <span class="nc">DataSourceConnectionPool</span><span class="o">(</span><span class="n">ds</span><span class="o">))</span>
 </pre>
 
 <p><code>ConnectionPool</code> and <code>ConnectionPoolSettings</code>&rsquo;s parameters are like this:</p>
@@ -168,6 +168,13 @@ db.default.password=""
 db.default.poolInitialSize=10
 db.default.poolMaxSize=20
 db.default.connectionTimeoutMillis=1000
+
+# Connection Pool settings
+db.default.poolInitialSize=5
+db.default.poolMaxSize=7
+db.default.poolConnectionTimeoutMillis=1000
+db.default.poolValidationQuery="select 1 as one"
+db.default.poolFactoryName="commons-dbcp"
 
 db.legacy.driver="org.h2.Driver"
 db.legacy.url="jdbc:h2:file:db/db2"
