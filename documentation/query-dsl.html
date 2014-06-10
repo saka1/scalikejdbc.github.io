@@ -115,6 +115,52 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <hr/>
 
+<h4 id="and/or-conditions">And/Or conditions</h4>
+
+<hr/>
+<pre class="highlight scala"><span class="k">val</span> <span class="n">o</span> <span class="k">=</span> <span class="nc">Order</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"o"</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">orders</span> <span class="k">=</span> <span class="n">withSQL</span> <span class="o">{</span>
+  <span class="n">select</span>
+    <span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">where</span>
+    <span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">productId</span><span class="o">,</span> <span class="mi">123</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">and</span>
+    <span class="o">.</span><span class="n">isNotNull</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">orderedAt</span><span class="o">)</span>
+  <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="nc">Order</span><span class="o">(</span><span class="n">o</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+
+<span class="c1">// select o.id as i_on_o, o.customer_id ci_on_o, o.product_id as pi_on_o, o.ordered_at as oa_on_o
+// from orders o where o.product_id = ? and o.ordered_at is not null
+</span></pre>
+<pre class="highlight scala"><span class="k">val</span> <span class="n">orders</span> <span class="k">=</span> <span class="n">withSQL</span> <span class="o">{</span>
+  <span class="n">select</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">id</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">where</span>
+    <span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">productId</span><span class="o">,</span> <span class="mi">123</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">or</span>
+    <span class="o">.</span><span class="n">isNull</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">customerId</span><span class="o">)</span>
+  <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="nc">Order</span><span class="o">(</span><span class="n">o</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+
+<span class="c1">// select o.id as i_on_o from orders o where o.product_id = ? and o.customer_id is null
+</span></pre>
+
+<p>Adding round bracket is like this:</p>
+<pre class="highlight scala"><span class="k">val</span> <span class="n">ids</span> <span class="k">=</span> <span class="n">withSQL</span> <span class="o">{</span>
+  <span class="n">select</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">id</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">where</span><span class="o">.</span><span class="n">isNotNull</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">accountId</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">and</span><span class="o">.</span><span class="n">withRoundBracket</span> <span class="o">{</span> <span class="k">_</span><span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">productId</span><span class="o">,</span> <span class="mi">1</span><span class="o">).</span><span class="n">or</span><span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">accountId</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span> <span class="o">}</span>
+  <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+
+<span class="c1">// select o.id as i_on_o from orders o
+// where o.account_id is not null 
+// and (o.product_id = ? or o.account_id = ?)
+</span></pre>
+
+<p>or simply using <code>#append</code>:</p>
+<pre class="highlight plaintext">select(o.result.id).from(Order as o).where.isNotNull(o.accountId)
+  .and.append(sqls"(${o.productId} = ${pid} or ${o.accountId} = ${aid})")
+</pre>
+
+<hr/>
+
 <h4 id="join-queries">Join queries</h4>
 
 <hr/>
@@ -128,11 +174,17 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="o">.</span><span class="n">limit</span><span class="o">(</span><span class="mi">4</span><span class="o">)</span>
     <span class="o">.</span><span class="n">offset</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
   <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="nc">Order</span><span class="o">(</span><span class="n">o</span><span class="o">,</span> <span class="n">p</span><span class="o">,</span> <span class="n">a</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select o.*, p.*, a.* from orders o inner join products p on o.product_id = p.id
+// left join accounts a on o.account_id = a.id
+// where o.product_id = ? order by o.id desc limit ? offset ?
+</span></pre>
 
 <p><code>.on(o.productId, p.id)</code> is simply converted to <code>sqls&quot;${o.productId} = ${p.id}&quot;</code>. If you need to write more complex condition to join tables, use <code>sqls</code> directly.</p>
 <pre class="highlight scala">  <span class="o">.</span><span class="n">innerJoin</span><span class="o">(</span><span class="nc">Product</span> <span class="n">as</span> <span class="n">p</span><span class="o">).</span><span class="n">on</span><span class="o">(</span><span class="n">sqls</span><span class="s">"${o.proudctId} = ${p.id} and ${o.deletedAt} is not null"</span><span class="o">)</span>
-</pre>
+
+  <span class="c1">// inner join products p on o.product_id = p.id and o.deleted_at is not null
+</span></pre>
 
 <hr/>
 
@@ -149,7 +201,11 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
   <span class="o">}.</span><span class="n">map</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">accountRequired</span><span class="o">)</span> <span class="nc">Order</span><span class="o">(</span><span class="n">o</span><span class="o">,</span> <span class="n">p</span><span class="o">,</span> <span class="n">a</span><span class="o">)(</span><span class="n">rs</span><span class="o">)</span> <span class="k">else</span> <span class="nc">Order</span><span class="o">(</span><span class="n">o</span><span class="o">,</span> <span class="n">p</span><span class="o">)(</span><span class="n">rs</span><span class="o">)</span>
   <span class="o">}.</span><span class="n">single</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select o.*, p.*(, a.*) from orders o inner join products p on o.product_id = p.id
+// (left join accounts a on o.account_id = a.id)
+// where o.id = ?
+</span></pre>
 
 <p>If you just need to append optional conditions, <code>toAndConditionOpt</code>, and <code>toOrConditionOpt</code> are useful.</p>
 <pre class="highlight scala"><span class="k">val</span> <span class="o">(</span><span class="n">productId</span><span class="o">,</span> <span class="n">accountId</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="nc">None</span><span class="o">)</span>
@@ -161,7 +217,11 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="o">))</span>
     <span class="o">.</span><span class="n">orderBy</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">id</span><span class="o">)</span>
 <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select o.id as i_on_o from orders o
+// where o.product_id = ? (and o.account_id = ?)
+// order by o.id
+</span></pre>
 
 <hr/>
 
@@ -171,7 +231,9 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <pre class="highlight scala"><span class="k">val</span> <span class="n">inClauseResults</span> <span class="k">=</span> <span class="n">withSQL</span> <span class="o">{</span>
   <span class="n">select</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">in</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">id</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">))</span>
 <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="nc">Order</span><span class="o">(</span><span class="n">o</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select * from orders o where o.id in (?, ?, ?)
+</span></pre>
 
 <hr/>
 
@@ -182,14 +244,20 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
   <span class="n">select</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="n">id</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Account</span> <span class="n">as</span> <span class="n">a</span><span class="o">)</span>
     <span class="o">.</span><span class="n">where</span><span class="o">.</span><span class="n">exists</span><span class="o">(</span><span class="n">select</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">accountId</span><span class="o">,</span> <span class="n">a</span><span class="o">.</span><span class="n">id</span><span class="o">))</span>
 <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select a.id from accounts a
+// where exists (select * from orders o where o.account_id = a.id)
+</span></pre>
 
 <p>It&rsquo;s also possible to pass <code>sqls</code> values.</p>
 <pre class="highlight scala"><span class="n">withSQL</span> <span class="o">{</span>
   <span class="n">select</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="n">id</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Account</span> <span class="n">as</span> <span class="n">a</span><span class="o">)</span>
     <span class="o">.</span><span class="n">where</span><span class="o">.</span><span class="n">notExists</span><span class="o">(</span><span class="n">sqls</span><span class="s">"select ${o.id} from ${Order as o} where ${o.accountId} = ${a.id}"</span><span class="o">)</span>
 <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select a.id from accounts a
+// where not exists (select o.id from orders o where o.account_id = a.id)
+</span></pre>
 
 <hr/>
 
@@ -199,7 +267,9 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <pre class="highlight scala"><span class="n">withSQL</span> <span class="o">{</span>
   <span class="n">select</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">id</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">between</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">id</span><span class="o">,</span> <span class="mi">13</span><span class="o">,</span> <span class="mi">22</span><span class="o">)</span>
 <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select o.id as i_on_o from orders o where o.id between ? and ?
+</span></pre>
 
 <hr/>
 
@@ -210,7 +280,9 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <span class="k">val</span> <span class="n">productCount</span> <span class="k">=</span> <span class="n">withSQL</span> <span class="o">{</span>
   <span class="n">select</span><span class="o">(</span><span class="n">count</span><span class="o">(</span><span class="n">distinct</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">productId</span><span class="o">))).</span><span class="n">from</span><span class="o">(</span><span class="nc">Order</span> <span class="n">as</span> <span class="n">o</span><span class="o">)</span>
 <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">single</span><span class="o">.</span><span class="n">apply</span><span class="o">().</span><span class="n">get</span>
-</pre>
+
+<span class="c1">// select count(distinct o.product_id) from orders o
+</span></pre>
 
 <hr/>
 
@@ -223,7 +295,11 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="o">.</span><span class="n">where</span><span class="o">.</span><span class="n">isNotNull</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">accountId</span><span class="o">)</span>
     <span class="o">.</span><span class="n">groupBy</span><span class="o">(</span><span class="n">o</span><span class="o">.</span><span class="n">accountId</span><span class="o">)</span>
 <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">1</span><span class="o">),</span> <span class="n">rs</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">2</span><span class="o">))).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select o.account_id, count(1) from orders o
+// where o.account_id is not null
+// group by o.account_id
+</span></pre>
 
 <hr/>
 
@@ -235,7 +311,11 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="o">.</span><span class="n">union</span><span class="o">(</span><span class="n">select</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="n">id</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Product</span> <span class="n">as</span> <span class="n">p</span><span class="o">))</span>
     <span class="c1">//.unionAll(select(p.id).from(Product as p))
 </span><span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select a.id from accounts a
+// union 
+// select p.id from products p
+</span></pre>
 
 <hr/>
 
@@ -251,7 +331,13 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="o">.</span><span class="n">having</span><span class="o">(</span><span class="n">gt</span><span class="o">(</span><span class="n">sum</span><span class="o">(</span><span class="n">x</span><span class="o">(</span><span class="n">p</span><span class="o">).</span><span class="n">price</span><span class="o">),</span> <span class="mi">300</span><span class="o">))</span>
     <span class="o">.</span><span class="n">orderBy</span><span class="o">(</span><span class="n">sqls</span><span class="s">"amount"</span><span class="o">)</span>
   <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="s">"id"</span><span class="o">),</span> <span class="n">rs</span><span class="o">.</span><span class="n">int</span><span class="o">(</span><span class="s">"amount"</span><span class="o">))).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// select x.account_id id, sum(x.price) as amount 
+// from (select o.*, p.* from orders o inner join products p on o.product_id = p.id) x
+// group by x.account_id
+// having sum(x.price) &gt; ?
+// order by amount
+</span></pre>
 
 <hr/>
 
@@ -262,6 +348,8 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
   <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Member</span><span class="o">).</span><span class="n">values</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"Alice"</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">)</span>
 <span class="o">}.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 
+<span class="c1">// insert into members values (?, ?, ?)
+</span>
 <span class="n">withSQL</span> <span class="o">{</span>
   <span class="k">val</span> <span class="n">m</span> <span class="k">=</span> <span class="nc">Member</span><span class="o">.</span><span class="n">column</span>
   <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Member</span><span class="o">).</span><span class="n">namedValues</span><span class="o">(</span>
@@ -270,16 +358,22 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="n">m</span><span class="o">.</span><span class="n">createdAt</span> <span class="o">-&gt;</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span>
   <span class="o">)</span>
 <span class="o">}.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// insert into members (id, name, created_at) values (?, ?, ?)
+</span></pre>
 
 <p>Or <code>applyUpdate</code> is much simpler. But in some cases, applyUpdate causes compilation errors since Scala 2.10.1. This is not an issue of ScalikeJDBC. If you suffered it, use <code>withSQL { }.update.apply()</code> instead.</p>
 <pre class="highlight scala"><span class="n">applyUpdate</span> <span class="o">{</span> <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Member</span><span class="o">).</span><span class="n">values</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">)</span> <span class="o">}</span>
 
+<span class="c1">// insert into members values (?, ?, ?)
+</span>
 <span class="k">val</span> <span class="n">c</span> <span class="k">=</span> <span class="nc">Member</span><span class="o">.</span><span class="n">column</span>
 <span class="n">applyUpdate</span> <span class="o">{</span>
   <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Member</span><span class="o">).</span><span class="n">columns</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="n">id</span><span class="o">,</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="o">,</span> <span class="n">c</span><span class="o">.</span><span class="n">createdAt</span><span class="o">).</span><span class="n">values</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"Bob"</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">)</span>
 <span class="o">}</span>
-</pre>
+
+<span class="c1">// insert into members (id, name, created_at) values (?, ?, ?)
+</span></pre>
 
 <hr/>
 
@@ -295,7 +389,9 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <span class="n">withSQL</span> <span class="o">{</span>
   <span class="n">insert</span><span class="o">.</span><span class="n">into</span><span class="o">(</span><span class="nc">Product</span><span class="o">).</span><span class="n">select</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">LegacyProduct</span> <span class="n">as</span> <span class="n">lp</span><span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">isNotNull</span><span class="o">(</span><span class="n">lp</span><span class="o">.</span><span class="n">id</span><span class="o">))</span>
 <span class="o">}.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// insert into products select lp.* from legacy_products lp where lp.id is not null
+</span></pre>
 
 <hr/>
 
@@ -305,7 +401,9 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <pre class="highlight scala"><span class="n">withSQL</span> <span class="o">{</span>
   <span class="n">delete</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">Member</span><span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="nc">Member</span><span class="o">.</span><span class="n">column</span><span class="o">.</span><span class="n">id</span><span class="o">,</span> <span class="mi">123</span><span class="o">)</span>
 <span class="o">}.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// delete from members where id = ?
+</span></pre>
 
 <hr/>
 
@@ -318,7 +416,10 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="nc">Member</span><span class="o">.</span><span class="n">column</span><span class="o">.</span><span class="n">updatedAt</span> <span class="o">-&gt;</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span>
   <span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="nc">Member</span><span class="o">.</span><span class="n">column</span><span class="o">.</span><span class="n">id</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
 <span class="o">}.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+
+<span class="c1">// update members set name = ?, updated_at = ? 
+// where id = ?
+</span></pre>
 
 <hr/>
 
