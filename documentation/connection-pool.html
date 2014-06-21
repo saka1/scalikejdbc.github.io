@@ -43,6 +43,7 @@
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
+            <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
           </div>
         </div>
@@ -218,7 +219,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <h4 id="default:-commons-dbcp">Default: commons-dbcp</h4>
 
 <p><a href="http://commons.apache.org/proper/commons-dbcp/">http://commons.apache.org/proper/commons-dbcp/</a></p>
-<pre class="highlight scala"><span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'dbcp,</span> <span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> 
+<pre class="highlight scala"><span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">singleton</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> 
   <span class="nc">ConnectionPoolSettings</span><span class="o">(</span><span class="n">connectionPoolFactoryName</span> <span class="k">=</span> <span class="s">"commons-dbcp"</span><span class="o">))</span>
 </pre>
 
@@ -229,7 +230,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <p><a href="http://commons.apache.org/proper/commons-dbcp/">http://commons.apache.org/proper/commons-dbcp/</a></p>
 
 <p><a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.apache.commons%22%20AND%20a%3A%22commons-dbcp2%22">http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.apache.commons%22%20AND%20a%3A%22commons-dbcp2%22</a></p>
-<pre class="highlight scala"><span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'dbcp,</span> <span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> 
+<pre class="highlight scala"><span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">singleton</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> 
   <span class="nc">ConnectionPoolSettings</span><span class="o">(</span><span class="n">connectionPoolFactoryName</span> <span class="k">=</span> <span class="s">"commons-dbcp2"</span><span class="o">))</span>
 </pre>
 
@@ -242,7 +243,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <h4 id="bonecp">BoneCP</h4>
 
 <p><a href="http://jolbox.com/">http://jolbox.com/</a></p>
-<pre class="highlight scala"><span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'bonecp,</span> <span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> 
+<pre class="highlight scala"><span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">singleton</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">user</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> 
   <span class="nc">ConnectionPoolSettings</span><span class="o">(</span><span class="n">connectionPoolFactoryName</span> <span class="k">=</span> <span class="s">"bonecp"</span><span class="o">))</span>
 </pre>
 
@@ -265,7 +266,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
   <span class="n">ds</span><span class="o">.</span><span class="n">addDataSourceProperty</span><span class="o">(</span><span class="s">"password"</span><span class="o">,</span> <span class="n">password</span><span class="o">)</span>
   <span class="n">ds</span>
 <span class="o">}</span>
-<span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="ss">'hikaricp,</span> <span class="k">new</span> <span class="nc">DataSourceConnectionPool</span><span class="o">(</span><span class="n">dataSource</span><span class="o">))</span>
+<span class="nc">ConnectionPool</span><span class="o">.</span><span class="n">singleton</span><span class="o">(</span><span class="k">new</span> <span class="nc">DataSourceConnectionPool</span><span class="o">(</span><span class="n">dataSource</span><span class="o">))</span>
 </pre>
 
 <p><code>HikariCP</code> dependency should be added by yourself.</p>
