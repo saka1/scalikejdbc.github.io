@@ -149,12 +149,50 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <p><code>foreach</code> allows you to make some side-effect in iterations. This API is useful for handling large <code>ResultSet</code>.</p>
 <pre class="highlight scala"><span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
-  <span class="n">sql</span><span class="s">"select name from emp"</span> <span class="n">foreach</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="s">"name"</span><span class="o">))</span> <span class="o">}</span>
+  <span class="n">sql</span><span class="s">"select name from emp"</span><span class="o">.</span><span class="n">foreach</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> 
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="s">"name"</span><span class="o">))</span> 
+  <span class="o">}</span>
 <span class="o">}</span>
 
 <span class="k">val</span> <span class="n">e</span> <span class="k">=</span> <span class="nc">Emp</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"e"</span><span class="o">)</span>
 <span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
-  <span class="n">withSQL</span> <span class="o">{</span> <span class="n">select</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">name</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Emp</span> <span class="n">as</span> <span class="n">e</span><span class="o">)</span> <span class="o">}.</span><span class="n">foreach</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="o">))</span> <span class="o">}</span>
+  <span class="n">withSQL</span> <span class="o">{</span> <span class="n">select</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Emp</span> <span class="n">as</span> <span class="n">e</span><span class="o">)</span> <span class="o">}.</span><span class="n">foreach</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> 
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="o">))</span> 
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+
+<hr/>
+
+<h4 id="setting-jdbc-fetchsize">Setting JDBC fetchSize</h4>
+
+<hr/>
+
+<p>For instance, the PostgreSQL JDBC driver does infinite(!) caching for result sets if fetchSize is set to 0 (the default) and this causes memory problems.</p>
+
+<p><a href="http://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html#setFetchSize-int-">http://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html#setFetchSize-int-</a></p>
+
+<p>You can specify JDBC fetchSize as follows since version 2.0.5.</p>
+<pre class="highlight scala"><span class="k">val</span> <span class="n">e</span> <span class="k">=</span> <span class="nc">Emp</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"e"</span><span class="o">)</span>
+<span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
+  <span class="n">sql</span><span class="s">"select name from emp"</span>
+    <span class="o">.</span><span class="n">fetchSize</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">foreach</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="s">"name"</span><span class="o">))</span> <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+
+<p>Or it&rsquo;s also fine to set fetchSize to <code>scalikejdbc.DBSession</code>.</p>
+<pre class="highlight scala"><span class="k">val</span> <span class="o">(</span><span class="n">e</span><span class="o">,</span> <span class="n">c</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="nc">Emp</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"e"</span><span class="o">),</span> <span class="nc">Cmp</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"c"</span><span class="o">))</span>
+
+<span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">fetchSize</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+
+  <span class="n">withSQL</span> <span class="o">{</span> <span class="n">select</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Emp</span> <span class="n">as</span> <span class="n">e</span><span class="o">)</span> <span class="o">}.</span><span class="n">foreach</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> 
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="o">)</span> 
+  <span class="o">}</span>
+  <span class="n">withSQL</span> <span class="o">{</span> <span class="n">select</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="o">).</span><span class="n">from</span><span class="o">(</span><span class="nc">Cmp</span> <span class="n">as</span> <span class="n">c</span><span class="o">)</span> <span class="o">}.</span><span class="n">foreach</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> 
+    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="o">))</span> 
+  <span class="o">}</span>
 <span class="o">}</span>
 </pre>
 
