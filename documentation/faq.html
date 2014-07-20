@@ -85,27 +85,8 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <p>As you know, Rails ActiveRecords saves timestamp values in UTC time zone. DB column types will be <code>timetamp without timezone</code>.</p>
 
-<p>When you need to work with them, call the following Java TimeZone&rsquo;s settter method at first.</p>
+<p>When you need to work with them, call the following Java TimeZone&rsquo;s settter method (instead of <code>DateTimeZone.setDefault(DateTimeZone.UTC)</code>) at first.</p>
 <pre class="highlight scala"><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="nc">TimeZone</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="nc">TimeZone</span><span class="o">.</span><span class="n">getTimeZone</span><span class="o">(</span><span class="s">"UTC"</span><span class="o">))</span>
-</pre>
-
-<p>The following is an example with MyQL 5.6.13.</p>
-<pre class="highlight plaintext">scala&gt; import scalikejdbc._
-import scalikejdbc._
-
-scala&gt; import org.joda.time._
-import org.joda.time._
-
-scala&gt; DateTimeZone.setDefault(DateTimeZone.UTC)
-
-scala&gt; val n = DateTime.now
-n: org.joda.time.DateTime = 2014-06-20T02:13:43.582Z
-
-scala&gt; n.toDate
-res1: java.util.Date = Fri Jun 20 11:13:43 JST 2014
-
-scala&gt; n.toDate.toSqlTimestamp
-res2: java.sql.Timestamp = 2014-06-20 11:13:43.582
 </pre>
 
 <hr/>
