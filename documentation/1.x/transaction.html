@@ -58,7 +58,7 @@
 <hr/>
 
 <p>Executes query in read-only mode.</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">names</span> <span class="k">=</span> <span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">names</span> <span class="k">=</span> <span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
   <span class="n">sql</span><span class="s">"select name from emp"</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="o">}.</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 <span class="o">}</span>
 
@@ -69,13 +69,13 @@
 </span><span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
   <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
 <span class="o">}</span>
-</pre>
+</code></pre>
 
 <p>Of course, <code>update</code> operations in read-only mode will cause <code>scala.sql.SQLException</code>.</p>
-<pre class="highlight scala"><span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
+<pre><code class="highlight scala"><span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
   <span class="n">sql</span><span class="s">"update emp set name = ${name} where id = ${id}"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 <span class="o">}</span> <span class="c1">// will throw scala.sql.SQLException
-</span></pre>
+</span></code></pre>
 
 <hr/>
 
@@ -84,18 +84,18 @@
 <hr/>
 
 <p>Executes query / update in auto-commit mode.</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">count</span> <span class="k">=</span> <span class="nc">DB</span> <span class="n">autoCommit</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">count</span> <span class="k">=</span> <span class="nc">DB</span> <span class="n">autoCommit</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
   <span class="n">sql</span><span class="s">"update emp set name = ${name} where id = ${id}"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 <span class="o">}</span>
-</pre>
+</code></pre>
 
 <p>When using autoCommitSession, every operation will be executed in auto-commit mode.</p>
-<pre class="highlight scala"><span class="k">implicit</span> <span class="k">val</span> <span class="n">session</span> <span class="k">=</span> <span class="nc">DB</span><span class="o">.</span><span class="n">autoCommitSession</span>
+<pre><code class="highlight scala"><span class="k">implicit</span> <span class="k">val</span> <span class="n">session</span> <span class="k">=</span> <span class="nc">DB</span><span class="o">.</span><span class="n">autoCommitSession</span>
 <span class="k">try</span> <span class="o">{</span>
   <span class="n">sql</span><span class="s">"update emp set name = ${name1} where id = ${id1}"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span> <span class="c1">// auto-commit
 </span>  <span class="n">sql</span><span class="s">"update emp set name = ${name2} where id = ${id2}"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span> <span class="c1">// auto-commit
 </span><span class="o">}</span> <span class="k">finally</span> <span class="o">{</span> <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="o">()</span> <span class="o">}</span>
-</pre>
+</code></pre>
 
 <hr/>
 
@@ -106,13 +106,13 @@
 <p>Executes query / update in block-scoped transactions.</p>
 
 <p>If an Exception was thrown in the block, the transaction will perform rollback automatically.</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">count</span> <span class="k">=</span> <span class="nc">DB</span> <span class="n">localTx</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">count</span> <span class="k">=</span> <span class="nc">DB</span> <span class="n">localTx</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
   <span class="c1">// --- transcation scope start ---
 </span>  <span class="n">sql</span><span class="s">"update emp set name = ${name1} where id = ${id1}"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
   <span class="n">sql</span><span class="s">"update emp set name = ${name2} where id = ${id2}"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
   <span class="c1">// --- transaction scope end ---
 </span><span class="o">}</span>
-</pre>
+</code></pre>
 
 <hr/>
 
@@ -123,7 +123,7 @@
 <p>Executes query / update in already existing transactions.</p>
 
 <p>In this case, all the transactional operations (such as <code>Tx#begin()</code>, <code>Tx#rollback()</code> or <code>Tx#commit()</code>) should be managed by users of ScalikeJDBC.</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">db</span> <span class="k">=</span> <span class="nc">DB</span><span class="o">(</span><span class="n">conn</span><span class="o">)</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">db</span> <span class="k">=</span> <span class="nc">DB</span><span class="o">(</span><span class="n">conn</span><span class="o">)</span>
 <span class="k">try</span> <span class="o">{</span>
   <span class="n">db</span><span class="o">.</span><span class="n">begin</span><span class="o">()</span>
   <span class="k">val</span> <span class="n">names</span> <span class="k">=</span> <span class="n">db</span> <span class="n">withinTx</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
@@ -140,7 +140,7 @@
   <span class="k">val</span> <span class="n">names</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select name from emp"</span><span class="o">.</span><span class="n">map</span> <span class="o">{</span> <span class="n">rs</span> <span class="k">=&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="o">}.</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
   <span class="n">db</span><span class="o">.</span><span class="n">rollbackIfActive</span><span class="o">()</span> <span class="c1">// it NEVER throws Exception
 </span><span class="o">}</span> <span class="k">finally</span> <span class="o">{</span> <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="o">()</span> <span class="o">}</span>
-</pre>
+</code></pre>
 
 <hr/>
 
@@ -151,7 +151,7 @@
 <p>Executes query / update within Future operations.</p>
 
 <p>If one of the Future operations was failed, the transaction will perform rollback automatically.</p>
-<pre class="highlight scala"><span class="k">object</span> <span class="nc">FutureDB</span> <span class="o">{</span>
+<pre><code class="highlight scala"><span class="k">object</span> <span class="nc">FutureDB</span> <span class="o">{</span>
   <span class="k">implicit</span> <span class="k">val</span> <span class="n">ec</span> <span class="k">=</span> <span class="n">myOwnExecutorContext</span>
   <span class="k">def</span> <span class="n">updateFirstName</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">session</span><span class="k">:</span> <span class="kt">DBSession</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
     <span class="nc">Future</span> <span class="o">{</span> 
@@ -178,7 +178,7 @@
 
 <span class="nc">Example</span><span class="o">.</span><span class="n">fResult</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
 <span class="c1">// #=&gt; 1
-</span></pre>
+</span></code></pre>
 
             <hr/>
             <div class="alert alert-info small"> 

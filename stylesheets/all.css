@@ -172,7 +172,10 @@ body {
 .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi {
   color: #a8e1fe;
   font-weight: bold;
+}pre {
+  background-color: #122b3b;
 }
+
 code {
   color: #666633;
 }

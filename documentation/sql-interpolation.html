@@ -64,7 +64,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <p>SQLInterpolation is an SQL builder which uses String interpolation since Scala 2.10. </p>
 
 <p>The usage is pretty simple - just embedding values into sql&quot;&ldquo; template without <code>#bind</code> or <code>#bindByName</code>. It looks really cool.</p>
-<pre class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span>
+<pre><code class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span>
 
 <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="mi">123</span>
 <span class="k">val</span> <span class="n">member</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select id, name from members where id = ${id}"</span>
@@ -73,11 +73,11 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <span class="c1">// above code is same as follows:
 // SQL("select id, name from members where id = {id}").bindByName('id -&gt; id)
 //   .map(rs =&gt; Member(rs)).single.apply()
-</span></pre>
+</span></code></pre>
 
 <p>Don&rsquo;t worry, this code is safely protected from SQL injection attacks. <code>${id}</code> will be a place holder.</p>
-<pre class="highlight sql"><span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="n">name</span> <span class="k">from</span> <span class="n">members</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="o">?</span>
-</pre>
+<pre><code class="highlight sql"><span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="n">name</span> <span class="k">from</span> <span class="n">members</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="o">?</span>
+</code></pre>
 
 <hr/>
 
@@ -86,14 +86,14 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <hr/>
 
 <p><code>SQLSyntax</code> is not a binding parameter but a part of SQL. You can create a <code>SQLSyntax</code> object with sqls&rdquo;&ldquo; String interpolation.</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">ordering</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">isDesc</span><span class="o">)</span> <span class="n">sqls</span><span class="s">"desc"</span> <span class="k">else</span> <span class="n">sqls</span><span class="s">"asc"</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">ordering</span> <span class="k">=</span> <span class="k">if</span> <span class="o">(</span><span class="n">isDesc</span><span class="o">)</span> <span class="n">sqls</span><span class="s">"desc"</span> <span class="k">else</span> <span class="n">sqls</span><span class="s">"asc"</span>
 <span class="k">val</span> <span class="n">members</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select id, name from members limit 10 order by id ${ordering}"</span>
   <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="nc">Member</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+</code></pre>
 
 <p><code>${ordering}</code> will be directly converted to a part of SQL.</p>
-<pre class="highlight sql"><span class="k">select</span> <span class="n">id</span> <span class="p">,</span> <span class="n">name</span> <span class="k">from</span> <span class="n">members</span> <span class="k">limit</span> <span class="mi">10</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span> <span class="k">desc</span>
-</pre>
+<pre><code class="highlight sql"><span class="k">select</span> <span class="n">id</span> <span class="p">,</span> <span class="n">name</span> <span class="k">from</span> <span class="n">members</span> <span class="k">limit</span> <span class="mi">10</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span> <span class="k">desc</span>
+</code></pre>
 
 <p>Don&rsquo;t worry again, this code is safely protected. <code>sqls&quot;&quot;</code> always treats external input values as binding parameters.</p>
 
@@ -108,7 +108,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <p>First of all, mix the <code>SQLSyntaxSupport[A]</code> trait to <code>A</code> companion object, and define <code>tableName</code> and <code>#apply</code> method to map values from <code>ResultSet</code> object in it. The unfamilier <code>ResultName[A]</code> are described later.</p>
 
 <p>NOTICE: When you use case classes for entities as follows (Group, GroupMember) everything goes fine. But if you use normal classes for entities, be aware of entity equality. See the following page in detail: <a href="/documentation/one-to-x.html">documentation/one-to-x.html</a></p>
-<pre class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span>
+<pre><code class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span>
 
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Group</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
 <span class="k">case</span> <span class="k">class</span> <span class="nc">GroupMember</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> 
@@ -140,10 +140,10 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="n">apply</span><span class="o">(</span><span class="n">m</span><span class="o">)(</span><span class="n">rs</span><span class="o">).</span><span class="n">copy</span><span class="o">(</span><span class="n">group</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">longOpt</span><span class="o">(</span><span class="n">g</span><span class="o">.</span><span class="n">id</span><span class="o">).</span><span class="n">map</span><span class="o">(</span><span class="k">_</span> <span class="k">=&gt;</span> <span class="nc">Group</span><span class="o">(</span><span class="n">g</span><span class="o">)(</span><span class="n">rs</span><span class="o">)))</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</pre>
+</code></pre>
 
 <p>Use them as follows:</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="mi">123</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="mi">123</span>
 
 <span class="k">val</span> <span class="o">(</span><span class="n">m</span><span class="o">,</span> <span class="n">g</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="nc">GroupMember</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"m"</span><span class="o">),</span> <span class="nc">Group</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"g"</span><span class="o">))</span>
 <span class="k">val</span> <span class="n">groupMember</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">GroupMember</span><span class="o">]</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"""
@@ -155,16 +155,16 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     ${m.id} = ${id}
   """</span>
   <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="nc">GroupMember</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="n">resultName</span><span class="o">,</span> <span class="n">g</span><span class="o">.</span><span class="n">resultName</span><span class="o">)).</span><span class="n">single</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+</code></pre>
 
 <p>Though the above code contains some <code>${...}</code> parts, I believe that you can understand what it means. Actually, this code runs the following SQL statement.</p>
-<pre class="highlight sql"><span class="k">select</span>
+<pre><code class="highlight sql"><span class="k">select</span>
    <span class="n">m</span><span class="p">.</span><span class="n">id</span> <span class="k">as</span> <span class="n">i_on_m</span><span class="p">,</span> <span class="n">m</span><span class="p">.</span><span class="n">name</span> <span class="k">as</span> <span class="n">n_on_m</span><span class="p">,</span> <span class="n">m</span><span class="p">.</span><span class="n">group_id</span> <span class="k">as</span> <span class="n">gi_on_m</span><span class="p">,</span> <span class="k">g</span><span class="p">.</span><span class="n">id</span> <span class="k">as</span> <span class="n">i_on_g</span><span class="p">,</span> <span class="k">g</span><span class="p">.</span><span class="n">name</span> <span class="k">as</span> <span class="n">n_on_g</span>
 <span class="k">from</span>
   <span class="n">group_member</span> <span class="n">m</span> <span class="k">left</span> <span class="k">join</span> <span class="k">group</span> <span class="k">g</span> <span class="k">on</span> <span class="n">m</span><span class="p">.</span><span class="n">group_id</span> <span class="o">=</span> <span class="k">g</span><span class="p">.</span><span class="n">id</span>
 <span class="k">where</span>
   <span class="n">m</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">?</span>
-</pre>
+</code></pre>
 
 <p>It seems to be natural that <code>${m.result.*}</code> is converted to listing all the columns, <code>${m.camelCase}</code> is converted to the <code>snake_case</code> column name. However, since you may have questions, I&rsquo;ll explain about some points.</p>
 
@@ -174,14 +174,14 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 
 <hr/>
 
-<p>In spite of column names are not defined anywhere, <code>${m.result.*}</code> is converted to listing all the column names. The secret is that laoding from metadata (and they will be cached) when first access to the table. It&rsquo;s possible to obtain all column names as a <code>Seq[String]</code> value via <code>columns</code>.</p>
+<p>In spite of column names are not defined anywhere, <code>${m.result.*}</code> is converted to listing all the column names. The secret is that loading from metadata (and they will be cached) when first access to the table. It&rsquo;s possible to obtain all column names as a <code>Seq[String]</code> value via <code>columns</code>.</p>
 
 <p>If you need to define column names by yourself or need to access multi databases, please define column names as follows:</p>
-<pre class="highlight scala"><span class="k">object</span> <span class="nc">GroupMember</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">GroupMember</span><span class="o">]</span> <span class="o">{</span>
+<pre><code class="highlight scala"><span class="k">object</span> <span class="nc">GroupMember</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">GroupMember</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">override</span> <span class="k">val</span> <span class="n">tableName</span> <span class="k">=</span> <span class="s">"groups_members"</span>
   <span class="k">override</span> <span class="k">val</span> <span class="n">columns</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">"id"</span><span class="o">,</span> <span class="s">"name"</span><span class="o">,</span> <span class="s">"group_id"</span><span class="o">)</span>
 <span class="o">}</span>
-</pre>
+</code></pre>
 
 <hr/>
 
@@ -200,14 +200,14 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <p><a href="http://docs.scala-lang.org/overviews/macros/overview.html">http://docs.scala-lang.org/overviews/macros/overview.html</a></p>
 
 <p>If you don&rsquo;t want to use Type Dynamic, it&rsquo;s also possible to call <code>#field(String)</code> or <code>#column(String)</code> with String value. For instance, the following four examples mean the same thing.</p>
-<pre class="highlight scala"><span class="n">m</span><span class="o">.</span><span class="n">groupId</span>
+<pre><code class="highlight scala"><span class="n">m</span><span class="o">.</span><span class="n">groupId</span>
 <span class="n">m</span><span class="o">.</span><span class="n">field</span><span class="o">(</span><span class="s">"groupId"</span><span class="o">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">column</span><span class="o">(</span><span class="s">"group_id"</span><span class="o">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">c</span><span class="o">(</span><span class="s">"group_id"</span><span class="o">)</span>
-</pre>
+</code></pre>
 
 <p>In some cases, you might want to avoid expose column names to application layer. If this is the case, override <code>nameConverters</code>. If you want to treat <code>service_cd</code> column as <code>serviceCode</code>, define regular expression and replaced name in columns as follows. Since the <code>nameConverters</code> works as partial match retrieval, it&rsquo;s also possible to specify just <code>Map(&quot;Code&quot; -&gt; &quot;cd&quot;)</code>.</p>
-<pre class="highlight scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">Event</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">serviceCode</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span>
+<pre><code class="highlight scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">Event</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">serviceCode</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span>
 
 <span class="k">object</span> <span class="nc">Event</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Event</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">override</span> <span class="k">val</span> <span class="n">tableName</span> <span class="k">=</span> <span class="s">"events"</span>
@@ -216,7 +216,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
   <span class="c1">// specify regular expression to match
 </span>  <span class="k">override</span> <span class="k">val</span> <span class="n">nameConverters</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"^serviceCode$"</span> <span class="o">-&gt;</span> <span class="s">"service_cd"</span><span class="o">)</span>
 <span class="o">}</span>
-</pre>
+</code></pre>
 
 <hr/>
 
@@ -237,39 +237,39 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <p>If you use <code>Member.syntax()</code>, tableName will be set. For example,  <code>m.result.groupId</code> will be <code>&quot;members.group_id as gi_on_members&quot;</code>. If you specified as <code>Member.syntax(&quot;m&quot;)</code>, <code>m.result.groupId</code> will be <code>&quot;members.group_id as gi_on_m&quot;</code>.</p>
 
 <p>That&rsquo;s all the rules of <code>SQLSyntaxSupport</code>. I believed that now the following code will be easy to understand for you.</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">ids</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select ${m.result.id} from ${Member.as(m)} where ${m.gourpId} = 1"</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">ids</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select ${m.result.id} from ${Member.as(m)} where ${m.gourpId} = 1"</span>
   <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="n">rs</span><span class="o">.</span><span class="n">long</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="n">resultName</span><span class="o">.</span><span class="n">id</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+</code></pre>
 
 <p>Define <code>#apply(ResultName[Member])</code> method and the method will make your <code>#map</code> operation pretty simple.</p>
-<pre class="highlight scala"><span class="k">object</span> <span class="nc">Member</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="o">{</span>
+<pre><code class="highlight scala"><span class="k">object</span> <span class="nc">Member</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">override</span> <span class="k">val</span> <span class="n">tableName</span> <span class="k">=</span> <span class="s">"members"</span>
   <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">m</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">User</span><span class="o">])(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
     <span class="k">new</span> <span class="nc">Member</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">long</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="n">id</span><span class="o">),</span> <span class="n">name</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">string</span><span class="o">(</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="o">))</span>
   <span class="o">}</span>
 <span class="o">}</span>
-</pre>
+</code></pre>
 
 <p>Use the above code like this:</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">m</span> <span class="k">=</span> <span class="nc">Member</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"m"</span><span class="o">)</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">m</span> <span class="k">=</span> <span class="nc">Member</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"m"</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">members</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select ${m.result.*} from ${Member.as(m)}"</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="nc">Member</span><span class="o">(</span><span class="n">m</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 <span class="c1">// select m.id as i_on_m, m.name as n_on_m from members m
-</span></pre>
+</span></code></pre>
 
 <p>If you need just column names for insert/update/delete queries, use <code>#column.{name}</code> like this:</p>
-<pre class="highlight scala"><span class="k">val</span> <span class="n">c</span> <span class="k">=</span> <span class="nc">Member</span><span class="o">.</span><span class="n">column</span>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">c</span> <span class="k">=</span> <span class="nc">Member</span><span class="o">.</span><span class="n">column</span>
 <span class="n">sql</span><span class="s">"insert into ${Member.table} (${c.name}, ${c.birthday}) values (${name}, ${birthday})"</span>
   <span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
-</pre>
+</code></pre>
 
 <p>Since <code>#column</code> is a member of <code>SQLSyntaxSupport[A]</code>, you can use <code>#column</code> in <code>Member</code> object:</p>
-<pre class="highlight scala"><span class="k">object</span> <span class="nc">Member</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="o">{</span>
+<pre><code class="highlight scala"><span class="k">object</span> <span class="nc">Member</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="o">{</span>
   <span class="k">def</span> <span class="n">create</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">birthday</span><span class="k">:</span> <span class="kt">LocalDate</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">s</span><span class="k">:</span> <span class="kt">DBSession</span> <span class="o">=</span> <span class="nc">AutoSession</span><span class="o">)</span><span class="k">:</span> <span class="kt">Member</span> <span class="o">=</span> <span class="o">{</span>
     <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"insert into ${table} (${column.name}, ${column.birthday}) values (${name}, ${birthday})"</span>
       <span class="o">.</span><span class="n">updateAndReturnGeneratedKey</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
     <span class="nc">Member</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">birthday</span><span class="o">)</span>
   <span class="o">}</span>
-</pre>
+</code></pre>
 
 <hr/>
 
@@ -278,7 +278,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <hr/>
 
 <p>If you have multiple tables for same entity. For example, <code>orders_2011</code>, <code>orders_2012</code> and <code>orders_2013</code>.</p>
-<pre class="highlight scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">Order</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">productId</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">customerId</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span> <span class="n">createdAt</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">)</span>
+<pre><code class="highlight scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">Order</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">productId</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">customerId</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span> <span class="n">createdAt</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">)</span>
 
 <span class="k">class</span> <span class="nc">OrderTable</span><span class="o">(</span><span class="k">val</span> <span class="n">year</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Order</span><span class="o">]</span> <span class="o">{</span>
   <span class="c1">// Be careful if you build tableName with input values 
@@ -310,7 +310,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
     <span class="n">sql</span><span class="s">"select ${o.result.*} from ${o2013 as o3) where ${o.customerId} is not null"</span>
       <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">o2013</span><span class="o">(</span><span class="n">o3</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 <span class="o">}</span>
-</pre>
+</code></pre>
 
 <hr/>
 
@@ -321,7 +321,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
 <p>NOTICE: Since Scala 2.11, you can user a case class for 22+ columns table.</p>
 
 <p>Just use normal class and implement <code>EntityEquality</code> trait (for one-to-many relations).</p>
-<pre class="highlight scala"><span class="k">import</span> <span class="nn">scalikekdbc._</span>
+<pre><code class="highlight scala"><span class="k">import</span> <span class="nn">scalikekdbc._</span>
 
 <span class="k">class</span> <span class="nc">HugeTable</span><span class="o">(</span>
   <span class="k">val</span> <span class="n">column1</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
@@ -336,7 +336,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.0. If you're a 1.x user
   <span class="k">override</span> <span class="k">val</span> <span class="n">entityIdentity</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="n">column1</span><span class="o">,</span> <span class="n">columns2</span><span class="o">,</span> <span class="o">..,</span> <span class="n">columns23</span><span class="o">).</span><span class="n">mkString</span><span class="o">(</span><span class="s">"\t"</span><span class="o">)</span>
 
 <span class="o">}</span>
-</pre>
+</code></pre>
 
             <hr/>
             <div class="alert alert-info small"> 
