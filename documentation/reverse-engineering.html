@@ -97,7 +97,6 @@ sbt <span class="s2">"scalikejdbcGen companies Company"</span>
 <pre><code class="highlight scala"><span class="k">package</span> <span class="nn">models</span>
 
 <span class="k">import</span> <span class="nn">scalikejdbc._</span>
-<span class="k">import</span> <span class="nn">scalikejdbc.SQLInterpolation._</span>
 <span class="k">import</span> <span class="nn">org.joda.time.</span><span class="o">{</span><span class="nc">LocalDate</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">}</span>
 
 <span class="k">case</span> <span class="k">class</span> <span class="nc">Member</span><span class="o">(</span>
@@ -211,7 +210,7 @@ sbt <span class="s2">"scalikejdbcGen companies Company"</span>
 <span class="k">import</span> <span class="nn">scalikejdbc.specs2.mutable.AutoRollback</span>
 <span class="k">import</span> <span class="nn">org.specs2.mutable._</span>
 <span class="k">import</span> <span class="nn">org.joda.time._</span>
-<span class="k">import</span> <span class="nn">scalikejdbc.SQLInterpolation._</span>
+<span class="k">import</span> <span class="nn">scalikejdbc._</span>
 
 <span class="k">class</span> <span class="nc">MemberSpec</span> <span class="k">extends</span> <span class="nc">Specification</span> <span class="o">{</span>
 
