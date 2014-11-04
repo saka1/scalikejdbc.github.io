@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>Auto Macros - ScalikeJDBC</title>
+    <script type="text/javascript" src="//codeorigin.jquery.com/jquery-1.10.2.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+    <link href="/stylesheets/all.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="container">
+    <div class="navbar" role="navigation">
+      <div class="container">
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a class="navbar-brand" href="/">ScalikeJDBC</a></li>
+            <li><a href="/documentation/1.x/">ScalikeJDBC 1.x</a></li>
+            <li><a href="http://typesafe.com/activator/template/scalikejdbc-activator-template">Typesafe Activator</a></li>
+            <li><a href="https://groups.google.com/group/scalikejdbc-users-group">Users Group</a></li>
+            <li><a href="https://github.com/scalikejdbc/scalikejdbc">GitHub</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+        <div class="col-xs-2">
+          <div class="content small">
+            <h5>Latest version</h5>
+            <hr/>
+            <p><a href="/documentation/setup.html">Setup</a></p>
+            <p><a href="/documentation/configuration.html">Configuration</a></p>
+            <p><a href="/documentation/connection-pool.html">Connection Pool</a></p>
+            <p><a href="/documentation/operations.html">Operations</a></p>
+            <p><a href="/documentation/transaction.html">Transaction</a></p>
+            <p><a href="/documentation/auto-session.html">Auto Session</a></p>
+            <p><a href="/documentation/sql-interpolation.html">SQLInterpolation</a></p>
+            <p><a href="/documentation/query-dsl.html">QueryDSL</a></p>
+            <p><a href="/documentation/one-to-x.html">One-to-x API</a></p>
+            <p><a href="/documentation/auto-macros.html">Auto Macros</a></p>
+            <p><a href="/documentation/query-inspector.html">Query Inspector</a></p>
+            <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
+            <p><a href="/documentation/testing.html">Testing</a></p>
+            <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
+            <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
+            <p><a href="/documentation/faq.html">FAQ</a></p>
+            <p><a href="/contribution.html">Contribution</a></p>
+          </div>
+        </div>
+        <div class="col-xs-10">
+          <div class="content">
+<a href="https://github.com/scalikejdbc/scalikejdbc"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+<div class="alert alert-info">
+Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user, visit <a href="/documentation/1.x/">here</a>.
+</div>
+            <h2 id="auto-macros">Auto Macros</h2>
+
+<hr/>
+
+<h3 id="avoid-boilerplate-code">Avoid Boilerplate Code</h3>
+
+<hr/>
+
+<p>You can avoid writing boilerplate code when using <code>scalikejdbc-syntax-support-macro</code>.</p>
+
+<hr/>
+
+<h3 id="setup">Setup</h3>
+
+<hr/>
+
+<p>Add the following aditional dependency to your sbt project.</p>
+<pre><code class="highlight scala"><span class="n">libraryDendencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-syntax-support-macro"</span> <span class="o">%</span> <span class="s">"2.1.4"</span>
+</code></pre>
+
+<hr/>
+
+<h3 id="usage">Usage</h3>
+
+<hr/>
+
+<p>Usually, we should write ResultSet extractor method as follows.</p>
+<pre><code class="highlight scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">Company</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">countryId</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span> <span class="n">country</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Country</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span><span class="o">)</span>
+
+<span class="k">object</span> <span class="nc">Company</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Company</span><span class="o">]</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">,</span> <span class="n">rn</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">Company</span><span class="o">])</span><span class="k">:</span> <span class="kt">Company</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Company</span><span class="o">(</span>
+    <span class="n">id</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">rn</span><span class="o">.</span><span class="n">id</span><span class="o">),</span> 
+    <span class="n">name</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">rn</span><span class="o">.</span><span class="n">name</span><span class="o">),</span> 
+    <span class="n">countryId</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">rn</span><span class="o">.</span><span class="n">countryId</span><span class="o">)</span>
+  <span class="o">)</span>
+<span class="o">}</span>
+</code></pre>
+
+<p>When using scalikejdbc-syntax-support-macro, you can use <code>#autoConstruct</code> macro. </p>
+<pre><code class="highlight scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">Company</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">countryId</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span> <span class="n">country</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Country</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span><span class="o">)</span>
+
+<span class="k">object</span> <span class="nc">Company</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Company</span><span class="o">]</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">,</span> <span class="n">rn</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">Company</span><span class="o">])</span><span class="k">:</span> <span class="kt">Company</span> <span class="o">=</span> 
+    <span class="n">autoConstruct</span><span class="o">(</span><span class="n">rs</span><span class="o">,</span> <span class="n">rn</span><span class="o">,</span> <span class="s">"country"</span><span class="o">)</span> <span class="c1">// "country" will be ignored when binding values from ResultSet
+</span><span class="o">}</span>
+</code></pre>
+
+<p>The <code>#autoConstruct</code> method binds all the fields defined at the primary constructor automatically.</p>
+
+<p>The <code>country</code> field in the above example class should be ignored. In such cases, you should specify additional String parameter such as <code>&quot;country&quot;</code>.
+Of course, the <code>&quot;country&quot;</code> will be verified at Scala compilation time. We believe that&rsquo;s pretty cool and useful.</p>
+
+            <hr/>
+            <div class="alert alert-info small"> 
+              If this webpage has typo or something wrong, Please report or fix. <a href="/contribution.html">How?</a>
+            </div> 
+<a href="https://twitter.com/ScalikeJDBC" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @ScalikeJDBC</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  </body>
+</html>
+
