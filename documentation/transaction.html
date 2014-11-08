@@ -135,13 +135,11 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 
 <hr/>
 
-<h3 id="#futurelocaltx-block-(2.0.1-or-higher)">#futureLocalTx block (2.0.1 or higher)</h3>
+<h3 id="#futurelocaltx-block">#futureLocalTx block</h3>
 
 <hr/>
 
-<p>Executes query / update within Future operations.</p>
-
-<p>If one of the Future operations was failed, the transaction will perform rollback automatically.</p>
+<p><code>futureLocalTx</code> use <code>Future</code>&rsquo;s state as transaction boundary. If one of the Future operations was failed, the transaction will perform rollback automatically. </p>
 <pre><code class="highlight scala"><span class="k">object</span> <span class="nc">FutureDB</span> <span class="o">{</span>
   <span class="k">implicit</span> <span class="k">val</span> <span class="n">ec</span> <span class="k">=</span> <span class="n">myOwnExecutorContext</span>
   <span class="k">def</span> <span class="n">updateFirstName</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">session</span><span class="k">:</span> <span class="kt">DBSession</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
