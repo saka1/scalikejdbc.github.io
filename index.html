@@ -42,7 +42,7 @@
             <p><a href="/documentation/query-inspector.html">Query Inspector</a></p>
             <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
             <p><a href="/documentation/testing.html">Testing</a></p>
-            <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
+            <p><a href="/documentation/playframework-support.html">Play Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
             <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
@@ -61,6 +61,9 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 <h2 id="just-write-sql-and-get-things-done!">Just write SQL and get things done!</h2>
 
 <hr/>
+
+<p><a href="https://twitter.com/ScalikeJDBC" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @ScalikeJDBC</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?&#39;http&#39;:&#39;https&#39;;if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+&#39;://platform.twitter.com/widgets.js&#39;;fjs.parentNode.insertBefore(js,fjs);}}(document, &#39;script&#39;, &#39;twitter-wjs&#39;);</script></p>
 
 <p><img alt="Logo" src="/images/logo.png" /></p>
 
@@ -81,7 +84,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 
 <p>We believe that ScalikeJDBC basically works with any other RDBMS (Oracle, SQL Server and so on).</p>
 
-<h3 id="amazon-reshift,-facebook-presto-also-supports-jdbc">Amazon Reshift, Facebook Presto also supports JDBC</h3>
+<h3 id="amazon-redshift,-facebook-presto-also-supports-jdbc">Amazon Redshift, Facebook Presto also supports JDBC</h3>
 
 <p>If you can access some datastore via JDBC interface, that means you can access them via ScalikeJDBC too.</p>
 
@@ -122,7 +125,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 
 <p>All you need to do is just adding ScalikeJDBC, JDBC driver &amp; slf4j implementation. </p>
 
-<h3 id="scalikejdbc-2.1">ScalikeJDBC 2.1</h3>
+<h3 id="scalikejdbc-2.x">ScalikeJDBC 2.x</h3>
 
 <p>See <a href="/">ScalikeJDBC 2.1 Documentation</a> in detail.</p>
 <pre><code class="highlight scala"><span class="c1">// Scala 2.10, 2.11
@@ -133,24 +136,14 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 <span class="o">)</span>
 </code></pre>
 
-<h3 id="scalikejdbc-1.7,-1.8">ScalikeJDBC 1.7, 1.8</h3>
+<h3 id="scalikejdbc-1.x">ScalikeJDBC 1.x</h3>
 
-<p>See <a href="/documentation/1.x/">ScalikeJDBC 1.x Documentation</a> in detail.</p>
+<p>See <a href="/documentation/1.x/">ScalikeJDBC 1.x Documentation</a> for details. Scala 2.9 incompatible changes will be backported only to ScalikeJDBC 1.8.x. Don&rsquo;t worry. We&rsquo;ll keep maintaining ScalikeJDBC 1.7.x for Scala 2.9 users.</p>
 <pre><code class="highlight scala"><span class="c1">// Scala 2.9, 2.10
 </span><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>               <span class="o">%</span> <span class="s">"1.7.7"</span><span class="o">,</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-interpolation"</span> <span class="o">%</span> <span class="s">"1.7.7"</span><span class="o">,</span>
-  <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                        <span class="o">%</span> <span class="s">"1.4.182"</span><span class="o">,</span>
-  <span class="s">"ch.qos.logback"</span>  <span class="o">%</span>  <span class="s">"logback-classic"</span>           <span class="o">%</span> <span class="s">"1.1.2"</span>
-<span class="o">)</span>
-</code></pre>
-
-<p>Scala 2.9 incompatible changes will be backported only to ScalikeJDBC 1.8.x. Don&rsquo;t worry. We&rsquo;ll keep maintaining ScalikeJDBC 1.7.x for Scala 2.9 users.</p>
-<pre><code class="highlight scala"><span class="c1">// Scala 2.10
-</span><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>               <span class="o">%</span> <span class="s">"1.8.2"</span><span class="o">,</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-interpolation"</span> <span class="o">%</span> <span class="s">"1.8.2"</span><span class="o">,</span>
-  <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                        <span class="o">%</span> <span class="s">"1.4.182"</span><span class="o">,</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>               <span class="o">%</span> <span class="s">"1.7.7"</span><span class="o">,</span> <span class="c1">// or "1.8.2" only for Scala 2.10
+</span>  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-interpolation"</span> <span class="o">%</span> <span class="s">"1.7.7"</span><span class="o">,</span> <span class="c1">// or "1.8.2" only for Scala 2.10
+</span>  <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                        <span class="o">%</span> <span class="s">"1.4.182"</span><span class="o">,</span>
   <span class="s">"ch.qos.logback"</span>  <span class="o">%</span>  <span class="s">"logback-classic"</span>           <span class="o">%</span> <span class="s">"1.1.2"</span>
 <span class="o">)</span>
 </code></pre>

@@ -42,7 +42,7 @@
             <p><a href="/documentation/query-inspector.html">Query Inspector</a></p>
             <p><a href="/documentation/reverse-engineering.html">Reverse Engineering</a></p>
             <p><a href="/documentation/testing.html">Testing</a></p>
-            <p><a href="/documentation/playframework-support.html">Play2 Support</a></p>
+            <p><a href="/documentation/playframework-support.html">Play Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
             <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
@@ -203,7 +203,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 
 <hr/>
 
-<p>In some cases you might want to implement a custom extractor. This can be useful for testing out queries.</p>
+<p>In some cases, you might need to implement your own custom extractor. This can be useful for testing out queries.</p>
 
 <p>This example shows how to preserve <code>null</code> values in a result set.</p>
 <pre><code class="highlight scala"><span class="k">def</span> <span class="n">toMap</span><span class="o">(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">)</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">]</span> <span class="k">=</span>  <span class="o">{</span>
@@ -214,6 +214,106 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 <span class="o">}</span>
 
 <span class="n">sql</span><span class="s">"select * from emp"</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="n">toMap</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="n">single</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+</code></pre>
+
+<hr/>
+
+<h4 id="using-parameterbinder">Using ParameterBinder</h4>
+
+<hr/>
+
+<p><code>ParameterBinder[A]</code> enables to customize how parameters should be bound to <code>PreparedStatement</code> object inside ScalikeJDBC.</p>
+
+<p>The following example shows how to use <code>ResultSet#setBinaryStream</code> when binding <code>InputStream</code> value to <code>PreparedStatement</code>.</p>
+<pre><code class="highlight scala"><span class="n">sql</span><span class="s">"create table blob_example (id bigint, data blob)"</span><span class="o">).</span><span class="n">execute</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+
+<span class="k">val</span> <span class="n">bytes</span> <span class="k">=</span> <span class="n">scala</span><span class="o">.</span><span class="nc">Array</span><span class="o">[</span><span class="kt">Byte</span><span class="o">](</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="n">bytesBinder</span> <span class="k">=</span> <span class="nc">ParameterBinder</span><span class="o">[</span><span class="kt">InputStream</span><span class="o">](</span>
+  <span class="n">value</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ByteArrayInputStream</span><span class="o">(</span><span class="n">bytes</span><span class="o">),</span>
+  <span class="n">binder</span> <span class="k">=</span> <span class="o">(</span><span class="n">stmt</span><span class="k">:</span> <span class="kt">PreparedStatement</span><span class="o">,</span> <span class="n">idx</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">stmt</span><span class="o">.</span><span class="n">setBinaryStream</span><span class="o">(</span><span class="n">idx</span><span class="o">,</span> <span class="n">in</span><span class="o">,</span> <span class="n">bytes</span><span class="o">.</span><span class="n">length</span><span class="o">)</span>
+<span class="o">)</span>
+
+<span class="n">sql</span><span class="s">"insert into blob_example (data) values (${bytesBinder})"</span><span class="o">).</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+</code></pre>
+
+<hr/>
+
+<h4 id="using-typebinder">Using TypeBinder</h4>
+
+<hr/>
+
+<p><code>TypeBinder[A]</code> is a type class to extract type <code>A</code> values from Result. </p>
+
+<p>The following example shows how to bind long value to <code>MemberId</code> value.</p>
+<pre><code class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span>
+<span class="k">import</span> <span class="nn">java.sql.ResultSet</span>
+
+<span class="k">implicit</span> <span class="k">val</span> <span class="n">session</span> <span class="k">=</span> <span class="nc">AutoSession</span>
+
+<span class="c1">// prepare data
+</span><span class="n">sql</span><span class="s">"create table member (id bigint not null primary key, name varchar(100))"</span><span class="o">.</span><span class="n">execute</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+<span class="n">sql</span><span class="s">"insert into member values (1, 'Alice')"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+<span class="n">sql</span><span class="s">"insert into member values (2, 'Bob')  "</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+<span class="n">sql</span><span class="s">"insert into member values (3, 'Chris')"</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">MemberId</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Member</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">MemberId</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+
+<span class="c1">// compilation error here
+</span><span class="k">val</span> <span class="n">ids</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">MemberId</span><span class="o">]</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select * from member"</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">get</span><span class="o">[</span><span class="kt">MemberId</span><span class="o">](</span><span class="s">"id"</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+
+<span class="c1">// &lt;console&gt;:24: error: could not find implicit value for evidence parameter of type scalikejdbc.TypeBinder[MemberId]
+//         val ids: Seq[MemberId] = sql"select * from member".map(_.get[MemberId]("id")).list.apply()
+//                                                                               ^
+</span></code></pre>
+
+<p>Your <code>MemberId</code> class is not supported by default. You can see what types are supported by default <a href="https://github.com/scalikejdbc/scalikejdbc/blob/develop/scalikejdbc-core/src/main/scala/scalikejdbc/TypeBinder.scala">here</a>.</p>
+
+<p>So you need to define your own <code>TypeBinder</code> for <code>MemberId</code> type as follows.</p>
+<pre><code class="highlight scala"><span class="c1">// define TypeBinder[MemberId] for implicit value
+</span><span class="k">implicit</span> <span class="k">val</span> <span class="n">memberIdTypeBinder</span><span class="k">:</span> <span class="kt">TypeBinder</span><span class="o">[</span><span class="kt">MemberId</span><span class="o">]</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">TypeBinder</span><span class="o">[</span><span class="kt">MemberId</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">ResultSet</span><span class="o">,</span> <span class="n">label</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">MemberId</span> <span class="o">=</span> <span class="nc">MemberId</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">getLong</span><span class="o">(</span><span class="n">label</span><span class="o">))</span>
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">ResultSet</span><span class="o">,</span> <span class="n">index</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span><span class="k">:</span> <span class="kt">MemberId</span> <span class="o">=</span> <span class="nc">MemberId</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">getLong</span><span class="o">(</span><span class="n">index</span><span class="o">))</span>
+<span class="o">}</span>
+
+<span class="k">val</span> <span class="n">ids</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">MemberId</span><span class="o">]</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select id from member"</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">get</span><span class="o">[</span><span class="kt">MemberId</span><span class="o">](</span><span class="s">"id"</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+<span class="c1">// ids: Seq[MemberId] = List(MemberId(1), MemberId(1), MemberId(2), MemberId(3))
+</span></code></pre>
+
+<p>Of course, it&rsquo;s also possible to simply deal with this case without <code>TypeBinder</code>.</p>
+<pre><code class="highlight scala"><span class="k">val</span> <span class="n">ids</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">MemberId</span><span class="o">]</span> <span class="k">=</span> <span class="n">sql</span><span class="s">"select id from member"</span><span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="nc">MemberId</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">"id"</span><span class="o">))).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+</code></pre>
+
+<hr/>
+
+<h4 id="using-java-se-8-date-time-api-(jsr-310)">Using Java SE 8 Date Time API (JSR-310)</h4>
+
+<hr/>
+
+<p>ScalikeJDBC still supports Java SE 7. So we provides Java 8 Date Time API support as an optional module.</p>
+<pre><code class="highlight scala"><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-jsr310"</span> <span class="o">%</span> <span class="s">"2.2.0"</span>
+</code></pre>
+
+<p>Usage is so simple. Just add <code>import scalikejdbc.jsr310._</code>.</p>
+<pre><code class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span><span class="o">,</span> <span class="n">jsr310</span><span class="o">.</span><span class="k">_</span>
+<span class="k">import</span> <span class="nn">java.time._</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">Group</span><span class="o">(</span>
+  <span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> 
+  <span class="n">name</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span> 
+  <span class="n">createdAt</span><span class="k">:</span> <span class="kt">ZonedDateTime</span><span class="o">)</span>
+
+<span class="k">object</span> <span class="nc">Group</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Group</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">g</span><span class="k">:</span> <span class="kt">SyntaxProvider</span><span class="o">[</span><span class="kt">Group</span><span class="o">])(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">)</span><span class="k">:</span> <span class="kt">Group</span> <span class="o">=</span> <span class="n">apply</span><span class="o">(</span><span class="n">g</span><span class="o">.</span><span class="n">resultName</span><span class="o">)(</span><span class="n">rs</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">g</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">Group</span><span class="o">])(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">)</span><span class="k">:</span> <span class="kt">Group</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Group</span><span class="o">(</span>
+    <span class="n">id</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">g</span><span class="o">.</span><span class="n">id</span><span class="o">),</span> 
+    <span class="n">name</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">g</span><span class="o">.</span><span class="n">name</span><span class="o">),</span> 
+    <span class="n">createdAt</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">g</span><span class="o">.</span><span class="n">createdAt</span><span class="o">)</span>
+    <span class="c1">// (or) createdAt = rs.get[ZonedDateTime](g.createdAt)
+</span>    <span class="c1">// (or) createdAt = rs.zonedDateTime(g.createdAt)
+</span>  <span class="o">)</span>
+<span class="o">}</span>
 </code></pre>
 
 <hr/>
