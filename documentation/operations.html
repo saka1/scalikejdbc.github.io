@@ -44,6 +44,7 @@
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
+            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.1">Core API Doc</a></p>
             <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
           </div>
@@ -70,7 +71,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 
 <hr/>
 
-<p><code>single</code> returns matched single row as an <code>Option</code> value. If matched rows is not single, Exception will be thrown.</p>
+<p><code>single</code> returns matched single row as an <code>Option</code> value. If unexpectedly multiple rows are returned, runtime exception will be thrown.</p>
 <pre><code class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span>
 
 <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="mi">123</span>
@@ -292,7 +293,7 @@ Be aware that this page is compatible with ScalikeJDBC 2.x. If you're a 1.x user
 <hr/>
 
 <p>ScalikeJDBC still supports Java SE 7. So we provides Java 8 Date Time API support as an optional module.</p>
-<pre><code class="highlight scala"><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-jsr310"</span> <span class="o">%</span> <span class="s">"2.2.0"</span>
+<pre><code class="highlight scala"><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-jsr310"</span> <span class="o">%</span> <span class="s">"2.2.1"</span>
 </code></pre>
 
 <p>Usage is so simple. Just add <code>import scalikejdbc.jsr310._</code>.</p>
