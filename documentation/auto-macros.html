@@ -45,7 +45,7 @@
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
-            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.1">Core API Doc</a></p>
+            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.2">Core API Doc</a></p>
             <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
           </div>
@@ -70,7 +70,7 @@
 <hr/>
 
 <p>Add the following aditional dependency to your sbt project.</p>
-<pre><code class="highlight scala"><span class="n">libraryDendencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-syntax-support-macro"</span> <span class="o">%</span> <span class="s">"2.2.1"</span>
+<pre class="highlight scala"><code><span class="n">libraryDendencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-syntax-support-macro"</span> <span class="o">%</span> <span class="s">"2.2.2"</span>
 </code></pre>
 
 <hr/>
@@ -80,7 +80,7 @@
 <hr/>
 
 <p>Usually, we should write ResultSet extractor method as follows.</p>
-<pre><code class="highlight scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">Company</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">countryId</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span> <span class="n">country</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Country</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span><span class="o">)</span>
+<pre class="highlight scala"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Company</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">countryId</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span> <span class="n">country</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Country</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span><span class="o">)</span>
 
 <span class="k">object</span> <span class="nc">Company</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Company</span><span class="o">]</span> <span class="o">{</span>
 
@@ -93,7 +93,7 @@
 </code></pre>
 
 <p>When using scalikejdbc-syntax-support-macro, you can use <code>#autoConstruct</code> macro. </p>
-<pre><code class="highlight scala"><span class="k">case</span> <span class="k">class</span> <span class="nc">Company</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">countryId</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span> <span class="n">country</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Country</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span><span class="o">)</span>
+<pre class="highlight scala"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Company</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">countryId</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span> <span class="n">country</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Country</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span><span class="o">)</span>
 
 <span class="k">object</span> <span class="nc">Company</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Company</span><span class="o">]</span> <span class="o">{</span>
 

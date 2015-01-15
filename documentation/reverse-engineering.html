@@ -45,7 +45,7 @@
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
-            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.1">Core API Doc</a></p>
+            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.2">Core API Doc</a></p>
             <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
           </div>
@@ -68,11 +68,11 @@
 <h3 id="sbt-command">Sbt Command</h3>
 
 <hr/>
-<pre><code class="highlight shell">sbt <span class="s2">"scalikejdbcGen [table-name (class-name)]"</span>
+<pre class="highlight shell"><code>sbt <span class="s2">"scalikejdbcGen [table-name (class-name)]"</span>
 </code></pre>
 
 <p>e.g.</p>
-<pre><code class="highlight shell">sbt <span class="s2">"scalikejdbcGen company"</span>
+<pre class="highlight shell"><code>sbt <span class="s2">"scalikejdbcGen company"</span>
 sbt <span class="s2">"scalikejdbcGen companies Company"</span>
 </code></pre>
 
@@ -83,7 +83,7 @@ sbt <span class="s2">"scalikejdbcGen companies Company"</span>
 <hr/>
 
 <p>From the following table:</p>
-<pre><code class="highlight sql"><span class="k">create</span> <span class="k">table</span> <span class="n">member</span> <span class="p">(</span>
+<pre class="highlight sql"><code><span class="k">create</span> <span class="k">table</span> <span class="n">member</span> <span class="p">(</span>
   <span class="n">id</span> <span class="n">int</span> <span class="k">generated</span> <span class="n">always</span> <span class="k">as</span> <span class="k">identity</span><span class="p">,</span>
   <span class="n">name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">not</span> <span class="k">null</span><span class="p">,</span>
   <span class="n">description</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span>
@@ -94,7 +94,7 @@ sbt <span class="s2">"scalikejdbcGen companies Company"</span>
 </code></pre>
 
 <p>This tool will generate the following Scala source code:</p>
-<pre><code class="highlight scala"><span class="k">package</span> <span class="nn">models</span>
+<pre class="highlight scala"><code><span class="k">package</span> <span class="nn">models</span>
 
 <span class="k">import</span> <span class="nn">scalikejdbc._</span>
 <span class="k">import</span> <span class="nn">org.joda.time.</span><span class="o">{</span><span class="nc">LocalDate</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">}</span>
@@ -205,7 +205,7 @@ sbt <span class="s2">"scalikejdbcGen companies Company"</span>
 </code></pre>
 
 <p>And specs2 or ScalaTest&rsquo;s FlatSpec.</p>
-<pre><code class="highlight scala"><span class="k">package</span> <span class="nn">models</span>
+<pre class="highlight scala"><code><span class="k">package</span> <span class="nn">models</span>
 
 <span class="k">import</span> <span class="nn">scalikejdbc.specs2.mutable.AutoRollback</span>
 <span class="k">import</span> <span class="nn">org.specs2.mutable._</span>

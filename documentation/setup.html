@@ -45,7 +45,7 @@
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
-            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.1">Core API Doc</a></p>
+            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.2">Core API Doc</a></p>
             <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
           </div>
@@ -70,15 +70,15 @@
 <p>Add latest version into your <code>build.sbt</code> or <code>project/Build.scala</code>. Don&rsquo;t forget JDBC driver and slf4j implementation.</p>
 
 <p>If you&rsquo;re still using Scala 2.9, you can&rsquo;t use <code>scalikejdbc-interpolation</code>.</p>
-<pre><code class="highlight scala"><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>       <span class="o">%</span> <span class="s">"2.2.1"</span><span class="o">,</span>
+<pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>       <span class="o">%</span> <span class="s">"2.2.2"</span><span class="o">,</span>
   <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                <span class="o">%</span> <span class="s">"1.4.184"</span><span class="o">,</span>
   <span class="s">"ch.qos.logback"</span>  <span class="o">%</span>  <span class="s">"logback-classic"</span>   <span class="o">%</span> <span class="s">"1.1.2"</span>
 <span class="o">)</span>
 </code></pre>
 
 <p>In your application, just add the following import.</p>
-<pre><code class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span>
+<pre class="highlight scala"><code><span class="k">import</span> <span class="nn">scalikejdbc._</span>
 </code></pre>
 
 <hr/>
@@ -88,9 +88,9 @@
 <hr/>
 
 <p>Using <code>scalikejdbc-test</code> is highly recommended to improve your application.</p>
-<pre><code class="highlight scala"><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>        <span class="o">%</span> <span class="s">"2.2.1"</span><span class="o">,</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-test"</span>   <span class="o">%</span> <span class="s">"2.2.1"</span>   <span class="o">%</span> <span class="s">"test"</span><span class="o">,</span>
+<pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>        <span class="o">%</span> <span class="s">"2.2.2"</span><span class="o">,</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-test"</span>   <span class="o">%</span> <span class="s">"2.2.2"</span>   <span class="o">%</span> <span class="s">"test"</span><span class="o">,</span>
   <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                 <span class="o">%</span> <span class="s">"1.4.184"</span><span class="o">,</span>
   <span class="s">"ch.qos.logback"</span>  <span class="o">%</span>  <span class="s">"logback-classic"</span>    <span class="o">%</span> <span class="s">"1.1.2"</span>
 <span class="o">)</span>
@@ -105,9 +105,9 @@
 <hr/>
 
 <p>If you use <code>application.conf</code> as settings file, add <code>scalikejdbc-config</code> too.</p>
-<pre><code class="highlight scala"><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>         <span class="o">%</span> <span class="s">"2.2.1"</span><span class="o">,</span>
-  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-config"</span>  <span class="o">%</span> <span class="s">"2.2.1"</span><span class="o">,</span>
+<pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc"</span>         <span class="o">%</span> <span class="s">"2.2.2"</span><span class="o">,</span>
+  <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-config"</span>  <span class="o">%</span> <span class="s">"2.2.2"</span><span class="o">,</span>
   <span class="s">"com.h2database"</span>  <span class="o">%</span>  <span class="s">"h2"</span>                  <span class="o">%</span> <span class="s">"1.4.184"</span><span class="o">,</span>
   <span class="s">"ch.qos.logback"</span>  <span class="o">%</span>  <span class="s">"logback-classic"</span>     <span class="o">%</span> <span class="s">"1.1.2"</span>
 <span class="o">)</span>
@@ -125,18 +125,18 @@
 You need to setup an sbt plugin named <code>scalikejdbc-mapper-generator</code>.</p>
 
 <h5 id="project/plugins.sbt">project/plugins.sbt</h5>
-<pre><code class="highlight scala"><span class="c1">// Don't forget adding your JDBC driver
+<pre class="highlight scala"><code><span class="c1">// Don't forget adding your JDBC driver
 </span><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.hsqldb"</span> <span class="o">%</span> <span class="s">"hsqldb"</span> <span class="o">%</span> <span class="s">"2.3.2"</span>
 
-<span class="n">addSbtPlugin</span><span class="o">(</span><span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-mapper-generator"</span> <span class="o">%</span> <span class="s">"2.2.1"</span><span class="o">)</span>
+<span class="n">addSbtPlugin</span><span class="o">(</span><span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-mapper-generator"</span> <span class="o">%</span> <span class="s">"2.2.2"</span><span class="o">)</span>
 </code></pre>
 
 <h5 id="build.sbt">build.sbt</h5>
-<pre><code class="highlight scala"><span class="n">scalikejdbcSettings</span>
+<pre class="highlight scala"><code><span class="n">scalikejdbcSettings</span>
 </code></pre>
 
 <h5 id="project/scalikejdbc.properties">project/scalikejdbc.properties</h5>
-<pre><code class="highlight plaintext"># ---
+<pre class="highlight plaintext"><code># ---
 # jdbc settings
 
 jdbc.driver=org.h2.Driver
@@ -179,11 +179,11 @@ generator.caseClassOnly=true
 <p>A simple console to connect database via JDBC.</p>
 
 <h5 id="mac-os-x,-linux">Mac OS X, Linux</h5>
-<pre><code class="highlight shell">curl -L http://git.io/dbconsole | sh
+<pre class="highlight shell"><code>curl -L http://git.io/dbconsole | sh
 </code></pre>
 
 <h5 id="windows">Windows</h5>
-<pre><code class="highlight plaintext">http://git.io/dbconsole.bat
+<pre class="highlight plaintext"><code>http://git.io/dbconsole.bat
 </code></pre>
 
 <p>Usage: <a href="/documentation/dbconsole.html">/documentation/dbconsole</a></p>

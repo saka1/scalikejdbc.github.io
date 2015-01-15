@@ -66,7 +66,7 @@
 <p>Add latest version into your <code>build.sbt</code> or <code>project/Build.scala</code>. Don&rsquo;t forget JDBC driver and slf4j implementation.</p>
 
 <p>If you&rsquo;re still using Scala 2.9, you can&rsquo;t use <code>scalikejdbc-interpolation</code>.</p>
-<pre><code class="highlight plaintext">libraryDependencies ++= Seq(
+<pre class="highlight plaintext"><code>libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc"               % "1.7.7",
   "org.scalikejdbc" %% "scalikejdbc-interpolation" % "1.7.7",
   "com.h2database"  %  "h2"                        % "1.4.177",
@@ -75,7 +75,7 @@
 </code></pre>
 
 <p>In your application, just add the following import.</p>
-<pre><code class="highlight scala"><span class="k">import</span> <span class="nn">scalikejdbc._</span><span class="o">,</span> <span class="nc">SQLInterpolation</span><span class="o">.</span><span class="k">_</span>
+<pre class="highlight scala"><code><span class="k">import</span> <span class="nn">scalikejdbc._</span><span class="o">,</span> <span class="nc">SQLInterpolation</span><span class="o">.</span><span class="k">_</span>
 </code></pre>
 
 <hr/>
@@ -85,7 +85,7 @@
 <hr/>
 
 <p>Using <code>scalikejdbc-test</code> is highly recommended to improve your application.</p>
-<pre><code class="highlight plaintext">libraryDependencies ++= Seq(
+<pre class="highlight plaintext"><code>libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc"               % "1.7.7",
   "org.scalikejdbc" %% "scalikejdbc-interpolation" % "1.7.7",
   "org.scalikejdbc" %% "scalikejdbc-test"          % "1.7.7"   % "test",
@@ -103,7 +103,7 @@
 <hr/>
 
 <p>If you use <code>application.conf</code> as settings file, add <code>scalikejdbc-config</code> too.</p>
-<pre><code class="highlight plaintext">libraryDependencies ++= Seq(
+<pre class="highlight plaintext"><code>libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc"               % "1.7.7",
   "org.scalikejdbc" %% "scalikejdbc-interpolation" % "1.7.7",
   "org.scalikejdbc" %% "scalikejdbc-config"        % "1.7.7",
@@ -124,18 +124,18 @@
 You need to setup an sbt plugin named <code>scalikejdbc-mapper-generator</code>.</p>
 
 <h5 id="project/plugins.sbt">project/plugins.sbt</h5>
-<pre><code class="highlight plaintext">// Don't forget adding your JDBC driver
+<pre class="highlight plaintext"><code>// Don't forget adding your JDBC driver
 libraryDependencies += "org.hsqldb" % "hsqldb" % "2.3.2"
 
 addSbtPlugin("org.scalikejdbc" %% "scalikejdbc-mapper-generator" % "1.7.7")
 </code></pre>
 
 <h5 id="build.sbt">build.sbt</h5>
-<pre><code class="highlight plaintext">scalikejdbcSettings
+<pre class="highlight plaintext"><code>scalikejdbcSettings
 </code></pre>
 
 <h5 id="project/scalikejdbc.properties">project/scalikejdbc.properties</h5>
-<pre><code class="highlight plaintext">jdbc.driver=org.h2.Driver
+<pre class="highlight plaintext"><code>jdbc.driver=org.h2.Driver
 jdbc.url=jdbc:h2:file:./db/hello
 jdbc.username=sa
 jdbc.password=
@@ -161,7 +161,7 @@ generator.encoding=UTF-8
 <p>Add <code>scalikejdbc-play-plugin</code> and <code>scalikejdbc-play-fixture-plugin</code> (optional) as Play plugins.</p>
 
 <h5 id="project/build.scala">project/Build.scala</h5>
-<pre><code class="highlight plaintext">val appDependencies = Seq(
+<pre class="highlight plaintext"><code>val appDependencies = Seq(
   "org.scalikejdbc" %% "scalikejdbc"                     % "1.7.7",
   "org.scalikejdbc" %% "scalikejdbc-play-plugin"         % "1.7.7",
   "org.scalikejdbc" %% "scalikejdbc-play-fixture-plugin" % "1.7.7", // optional
@@ -171,11 +171,11 @@ generator.encoding=UTF-8
 </code></pre>
 
 <h5 id="conf/play.plugins">conf/play.plugins</h5>
-<pre><code class="highlight plaintext">10000:scalikejdbc.PlayPlugin
+<pre class="highlight plaintext"><code>10000:scalikejdbc.PlayPlugin
 </code></pre>
 
 <p>If you use fixture-plugin too, PlayFixturePlugin should be loaded after PlayPlugin:</p>
-<pre><code class="highlight plaintext">10000:scalikejdbc.PlayPlugin
+<pre class="highlight plaintext"><code>10000:scalikejdbc.PlayPlugin
 11000:scalikejdbc.PlayFixturePlugin
 </code></pre>
 
@@ -190,11 +190,11 @@ generator.encoding=UTF-8
 <p>A simple console to connect database via JDBC.</p>
 
 <h5 id="mac-os-x,-linux">Mac OS X, Linux</h5>
-<pre><code class="highlight plaintext">curl -L http://git.io/dbconsole | sh
+<pre class="highlight plaintext"><code>curl -L http://git.io/dbconsole | sh
 </code></pre>
 
 <h5 id="windows">Windows</h5>
-<pre><code class="highlight plaintext">http://git.io/dbconsole.bat
+<pre class="highlight plaintext"><code>http://git.io/dbconsole.bat
 </code></pre>
 
 <p>Usage: <a href="/documentation/dbconsole.html">/documentation/dbconsole</a></p>
