@@ -159,6 +159,21 @@
 <span class="o">}</span>
 </code></pre>
 
+<p>Since version 2.2.1, you can attach tags to each query. This feature will help you when classifying queries.</p>
+<pre class="highlight scala"><code><span class="nc">GlobalSettings</span><span class="o">.</span><span class="n">taggedQueryCompletionListener</span> <span class="k">=</span> <span class="o">(</span><span class="n">sql</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">params</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Any</span><span class="o">],</span> <span class="n">millis</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">tags</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">{</span>
+  <span class="c1">// do something here
+</span><span class="o">}</span>
+<span class="nc">GlobalSettings</span><span class="o">.</span><span class="n">taggedQueryFailureListener</span> <span class="k">=</span> <span class="o">(</span><span class="n">sql</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">params</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Any</span><span class="o">],</span> <span class="n">e</span><span class="k">:</span> <span class="kt">Throwable</span><span class="o">,</span> <span class="n">tags</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="k">=&gt;</span> <span class="o">{</span>
+  <span class="c1">// do something here
+</span><span class="o">}</span>
+
+<span class="k">val</span> <span class="n">counts</span> <span class="k">=</span> <span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">s</span> <span class="k">=&gt;</span>
+  <span class="n">sql</span><span class="s">"select product_id, count(*) from orders group by product_id"</span>
+    <span class="o">.</span><span class="n">tags</span><span class="o">(</span><span class="s">"daily_batch"</span><span class="o">,</span> <span class="s">"sales"</span><span class="o">)</span>
+    <span class="o">.</span><span class="n">map</span><span class="o">(</span><span class="n">rs</span> <span class="k">=&gt;</span> <span class="nc">OrderCount</span><span class="o">(</span><span class="n">rs</span><span class="o">)).</span><span class="n">list</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+<span class="o">}</span>
+</code></pre>
+
             <hr/>
             <div class="alert alert-info small"> 
               If this webpage has typo or something wrong, Please report or fix. <a href="/contribution.html">How?</a>
