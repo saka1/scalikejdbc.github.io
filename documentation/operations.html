@@ -45,7 +45,7 @@
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
-            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.3">Core API Doc</a></p>
+            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.4">Core API Doc</a></p>
             <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
           </div>
@@ -267,7 +267,7 @@
 //                                                                               ^
 </span></code></pre>
 
-<p>Your <code>MemberId</code> class is not supported by default. You can see what types are supported by default <a href="https://github.com/scalikejdbc/scalikejdbc/blob/develop/scalikejdbc-core/src/main/scala/scalikejdbc/TypeBinder.scala">here</a>.</p>
+<p>Your <code>MemberId</code> class is not supported by default. You can see what types are supported by default <a href="https://github.com/scalikejdbc/scalikejdbc/blob/master/scalikejdbc-core/src/main/scala/scalikejdbc/TypeBinder.scala">here</a>.</p>
 
 <p>So you need to define your own <code>TypeBinder</code> for <code>MemberId</code> type as follows.</p>
 <pre class="highlight scala"><code><span class="c1">// define TypeBinder[MemberId] for implicit value
@@ -291,7 +291,7 @@
 <hr/>
 
 <p>ScalikeJDBC still supports Java SE 7. So we provides Java 8 Date Time API support as an optional module.</p>
-<pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-jsr310"</span> <span class="o">%</span> <span class="s">"2.2.3"</span>
+<pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-jsr310"</span> <span class="o">%</span> <span class="s">"2.2.4"</span>
 </code></pre>
 
 <p>Usage is so simple. Just add <code>import scalikejdbc.jsr310._</code>.</p>
