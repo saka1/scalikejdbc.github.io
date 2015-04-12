@@ -45,7 +45,7 @@
             <p><a href="/documentation/testing.html">Testing</a></p>
             <p><a href="/documentation/playframework-support.html">Play Support</a></p>
             <p><a href="/documentation/dbconsole.html">dbconsole</a></p>
-            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.4">Core API Doc</a></p>
+            <p><a href="http://www.javadoc.io/doc/org.scalikejdbc/scalikejdbc-core_2.11/2.2.5">Core API Doc</a></p>
             <p><a href="/documentation/faq.html">FAQ</a></p>
             <p><a href="/contribution.html">Contribution</a></p>
           </div>
@@ -61,7 +61,7 @@
 
 <hr/>
 
-<p>There are various query APIs. All of them (<code>single</code>, <code>first</code>, <code>list</code> and <code>foreach</code>) will execute <code>scala.sql.PreparedStatement#executeQuery()</code>.</p>
+<p>There are various query APIs. All of them (<code>single</code>, <code>first</code>, <code>list</code> and <code>foreach</code>) will execute <code>java.sql.PreparedStatement#executeQuery()</code>.</p>
 
 <hr/>
 
@@ -94,12 +94,11 @@
 
 <span class="c1">// QueryDSL
 </span><span class="k">object</span> <span class="nc">Emp</span> <span class="k">extends</span> <span class="nc">SQLSyntaxSupport</span><span class="o">[</span><span class="kt">Emp</span><span class="o">]</span> <span class="o">{</span>
-  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">e</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">Emp</span><span class="o">])(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">)</span><span class="k">:</span> <span class="kt">Emp</span> <span class="o">=</span>
-    <span class="k">new</span> <span class="nc">Emp</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="o">),</span> <span class="n">name</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="o">))</span>
+  <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">e</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">Emp</span><span class="o">])(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">)</span><span class="k">:</span> <span class="kt">Emp</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Emp</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="o">),</span> <span class="n">name</span> <span class="k">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="o">))</span>
 <span class="o">}</span>
 <span class="k">val</span> <span class="n">e</span> <span class="k">=</span> <span class="nc">Emp</span><span class="o">.</span><span class="n">syntax</span><span class="o">(</span><span class="s">"e"</span><span class="o">)</span>
 <span class="k">val</span> <span class="n">emp</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Emp</span><span class="o">]</span> <span class="k">=</span> <span class="nc">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
-  <span class="n">withSQL</span> <span class="o">{</span> <span class="n">select</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">Emp</span> <span class="n">as</span> <span class="n">e</span><span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="o">,</span> <span class="n">id</span><span class="o">)</span> <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="nc">Emp</span><span class="o">(</span><span class="n">e</span><span class="o">)).</span><span class="n">single</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
+  <span class="n">withSQL</span> <span class="o">{</span> <span class="n">select</span><span class="o">.</span><span class="n">from</span><span class="o">(</span><span class="nc">Emp</span> <span class="n">as</span> <span class="n">e</span><span class="o">).</span><span class="n">where</span><span class="o">.</span><span class="n">eq</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="o">,</span> <span class="n">id</span><span class="o">)</span> <span class="o">}.</span><span class="n">map</span><span class="o">(</span><span class="nc">Emp</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="n">resultName</span><span class="o">)).</span><span class="n">single</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 <span class="o">}</span>
 </code></pre>
 
@@ -291,7 +290,7 @@
 <hr/>
 
 <p>ScalikeJDBC still supports Java SE 7. So we provides Java 8 Date Time API support as an optional module.</p>
-<pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-jsr310"</span> <span class="o">%</span> <span class="s">"2.2.4"</span>
+<pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.scalikejdbc"</span> <span class="o">%%</span> <span class="s">"scalikejdbc-jsr310"</span> <span class="o">%</span> <span class="s">"2.2.5"</span>
 </code></pre>
 
 <p>Usage is so simple. Just add <code>import scalikejdbc.jsr310._</code>.</p>
@@ -321,7 +320,7 @@
 
 <hr/>
 
-<p><code>update</code> executes <code>scala.sql.PreparedStatement#executeUpdate()</code>.</p>
+<p><code>update</code> executes <code>java.sql.PreparedStatement#executeUpdate()</code>.</p>
 <pre class="highlight scala"><code><span class="k">import</span> <span class="nn">scalikejdbc._</span>
 
 <span class="nc">DB</span> <span class="n">localTx</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
@@ -358,7 +357,7 @@
 
 <hr/>
 
-<p><code>execute</code> executes <code>scala.sql.PreparedStatement#execute()</code>.</p>
+<p><code>execute</code> executes <code>java.sql.PreparedStatement#execute()</code>.</p>
 <pre class="highlight scala"><code><span class="nc">DB</span> <span class="n">autoCommit</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
   <span class="n">sql</span><span class="s">"create table emp (id integer primary key, name varchar(30))"</span><span class="o">.</span><span class="n">execute</span><span class="o">.</span><span class="n">apply</span><span class="o">()</span>
 <span class="o">}</span>
@@ -372,7 +371,7 @@
 
 <hr/>
 
-<p><code>batch</code> and <code>batchByName</code> executes <code>scala.sql.PreparedStatement#executeBatch()</code>.</p>
+<p><code>batch</code> and <code>batchByName</code> executes <code>java.sql.PreparedStatement#executeBatch()</code>.</p>
 <pre class="highlight scala"><code><span class="k">import</span> <span class="nn">scalikejdbc._</span>
 
 <span class="nc">DB</span> <span class="n">localTx</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">session</span> <span class="k">=&gt;</span>
