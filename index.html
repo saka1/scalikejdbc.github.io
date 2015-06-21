@@ -262,7 +262,7 @@ create table members (
 <p>Here is an example:</p>
 <pre class="highlight java"><code><span class="n">val</span> <span class="o">(</span><span class="n">p</span><span class="o">,</span> <span class="n">c</span><span class="o">)</span> <span class="o">=</span> <span class="o">(</span><span class="n">Programmer</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">"p"</span><span class="o">),</span> <span class="n">Company</span><span class="o">.</span><span class="na">syntax</span><span class="o">(</span><span class="s">"c"</span><span class="o">))</span>
 
-<span class="n">val</span> <span class="nl">programmers:</span> <span class="n">List</span><span class="o">[</span><span class="n">Long</span><span class="o">]</span> <span class="o">=</span> <span class="n">DB</span> <span class="n">readOnly</span> <span class="o">{</span> <span class="n">implicit</span> <span class="n">session</span> <span class="o">=&gt;</span>
+<span class="n">val</span> <span class="nl">programmers:</span> <span class="n">Seq</span><span class="o">[</span><span class="n">Programmer</span><span class="o">]</span> <span class="o">=</span> <span class="n">DB</span><span class="o">.</span><span class="na">readOnly</span> <span class="o">{</span> <span class="n">implicit</span> <span class="n">session</span> <span class="o">=&gt;</span>
   <span class="n">withSQL</span> <span class="o">{</span>
     <span class="n">select</span>
       <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">Programmer</span> <span class="n">as</span> <span class="n">p</span><span class="o">)</span>
